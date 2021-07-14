@@ -13,14 +13,48 @@
     </div>
     <div class="right">
       <div class="welcome"><span>欢迎登录</span></div>
-
+      <el-input
+        placeholder="请输入账号"
+        prefix-icon="el-icon-user"
+        v-model="username"
+        class="username">
+      </el-input>
+      <el-input
+        type="password"
+        placeholder="请输入密码"
+        prefix-icon="el-icon-lock"
+        class="password"
+        v-model="password">
+      </el-input>
+      <div class="status">
+        <el-checkbox v-model="checked" class="remenber-password"><span style="font-size: 12px">记住密码</span></el-checkbox>
+        <div class="forget"><a href="#">忘记密码</a></div>
+      </div>
+      <el-button type="primary" class="loginBtn" @click="login">登录</el-button>
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
-  name: "Login"
+  name: "Login",
+  components: {
+
+  },
+  data() {
+    return {
+      username: '',
+      password: '',
+      checked: false,
+    }
+  },
+  methods: {
+    login() {
+      console.log(this.username);
+      console.log(this.password);
+    }
+  }
 }
 </script>
 
@@ -65,19 +99,48 @@ export default {
     width: 55%;
     height: 100%;
     background-color: #fff;
+    display: flex;
+    /* 从上往下排列*/
+    flex-direction: column;
+    /* 水平居中*/
+    align-items: center;
   }
   .welcome {
     margin-top: 70px;
-    text-align: center;
+    margin-bottom: 35px;
   }
-
-  .welcome span{
-    /*display: block;*/
+  .welcome span {
     font-size: 20px;
     border-bottom: 2px solid #3A62D7;
     font-weight: bold;
   }
-
+  .username {
+    width: 265px;
+  }
+  .username input {
+    border: none
+  }
+  .password {
+    width: 265px;
+  }
+  .username ,.password {
+    margin-bottom: 5px;
+  }
+  .remenber-password {
+    align-content: flex-start;
+    margin-right: 140px;
+  }
+  .forget {
+    display: inline;
+    font-size: 12px;
+  }
+  .forget a:hover {
+    color: #409EFF;
+  }
+  .loginBtn {
+    width: 265px;
+    margin-top: 10px;
+  }
 
 
 
