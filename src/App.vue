@@ -1,19 +1,19 @@
 <template>
   <div id="app" class="App">
 <!--    <login></login>-->
-    <frame></frame>
+    <frame-web></frame-web>
   </div>
 </template>
 
 <script>
   // import Login from "components/common/login/Login";
-  import Frame from "components/content/frame/Frame";
+  import FrameWeb from "components/content/frameweb/FrameWeb";
 
   export default {
     name:'App',
     components: {
       // Login
-      Frame
+      FrameWeb
     }
   }
 
