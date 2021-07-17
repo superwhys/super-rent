@@ -24,6 +24,6 @@
   @import 'assets/css/base.css';
   .App{
     width: 100%;
-    height: 100%;
+    height: 100%
   }
 </style>

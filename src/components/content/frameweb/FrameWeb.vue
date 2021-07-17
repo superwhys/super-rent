@@ -1,11 +1,11 @@
 <template>
 
   <el-container>
-    <el-aside width="213px">
+    <el-aside width="213px" class="aside">
       <side-bar></side-bar>
     </el-aside>
     <el-container>
-      <el-header class="header">
+      <el-header height="160px" class="header">
         <page-head></page-head>
       </el-header>
       <el-main class="main">Main</el-main>
@@ -28,9 +28,14 @@ export default {
 </script>
 
 <style scoped>
+  .aside {
+    background-color: #002140;
+  }
+
   .header {
     background-color: black;
   }
+
   .main {
     background-color: gold;
   }
