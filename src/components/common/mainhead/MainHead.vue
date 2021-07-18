@@ -1,15 +1,17 @@
 <template>
   <div class="main-head">
-    <span class="name">租客姓名 : </span>
-    <el-input size="small" style="width: 115px" placeholder="请输入" v-model="nameInput"></el-input>
-    <span class="status">状态 : </span>
-    <el-select v-model="choseStatus" placeholder="请选择" size="small">
-      <el-option v-for="item in options"
-                 :key="item.value" :label="item.label"
-                 :value="item.value"></el-option>
-    </el-select>
-    <el-button type="primary" size="small" class="search">查询</el-button>
-    <el-button size="small">重置</el-button>
+    <div>
+      <span class="name">租客姓名 : </span>
+      <el-input size="small" style="width: 115px" placeholder="请输入" v-model="nameInput"></el-input>
+      <span class="status">状态 : </span>
+      <el-select v-model="choseStatus" placeholder="请选择" size="small">
+        <el-option v-for="item in options"
+                   :key="item.value" :label="item.label"
+                   :value="item.value"></el-option>
+      </el-select>
+      <el-button type="primary" size="small" class="search">查询</el-button>
+      <el-button size="small">重置</el-button>
+    </div>
     <div class="operation">
       <el-button icon="el-icon-plus" type="primary" size="small" @click="createClick">新建</el-button>
       <el-dropdown @command="handleCommand" trigger="click" class="batchOperation">
@@ -55,7 +57,7 @@ export default {
 <style scoped>
   .main-head {
     width: 770px;
-    height: 55px;
+    height: 110px;
     line-height: 55px;
   }
 
