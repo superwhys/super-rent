@@ -28,6 +28,7 @@ body {
   color: var(--color-text);
   /* rem vw/vh */
   width: 100vw;
+  background-color: #F0F0F0;
   /*background-image: url("../img/login/background.png");*/
 }
 

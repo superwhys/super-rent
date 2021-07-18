@@ -2,7 +2,7 @@
   <div>
     <el-menu
         class="el-menu-vertical-demo"
-        default-active="1-1"
+        default-active="Management"
         background-color="#002140"
         text-color="#fff"
         active-text-color="#ffd04b">
@@ -11,7 +11,7 @@
           <i class="el-icon-odometer"></i>
           <span>服务中心</span>
         </template>
-        <el-menu-item index="1-1">
+        <el-menu-item index="Management">
           <span slot="title">管理大厅</span>
         </el-menu-item>
       </el-submenu>
@@ -20,7 +20,7 @@
           <i class="el-icon-office-building"></i>
           <span slot="title">出租单位中心</span>
         </template>
-        <el-menu-item index="2-1">
+        <el-menu-item index="houseManager">
           <span slot="title">楼栋管理</span>
         </el-menu-item>
         <el-menu-item index="2-2">

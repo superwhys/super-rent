@@ -8,7 +8,9 @@
       <el-header height="160px" class="header">
         <page-head></page-head>
       </el-header>
-      <el-main class="main">Main</el-main>
+      <el-main class="main">
+        <building-man></building-man>
+      </el-main>
       <el-footer class="footer">Footer</el-footer>
     </el-container>
   </el-container>
@@ -17,12 +19,15 @@
 <script>
 import SideBar from "components/common/sidebar/SideBar";
 import PageHead from "components/common/pageheader/PageHead";
+import BuildingMan from "../buildingMan/BuildingMan";
+
 
 export default {
   name: "FrameWeb",
   components: {
     SideBar,
-    PageHead
+    PageHead,
+    BuildingMan
   }
 }
 </script>
@@ -37,7 +42,6 @@ export default {
   }
 
   .main {
-    background-color: gold;
   }
 
   .footer {
