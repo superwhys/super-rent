@@ -29,6 +29,7 @@ body {
   /* rem vw/vh */
   width: 100vw;
   background-color: #F0F0F0;
+  font-size: 12px;
   /*background-image: url("../img/login/background.png");*/
 }
 

@@ -24,6 +24,6 @@ export default {
   }
 
   .head {
-    margin: 15px 10px 0 10px;
+    margin: 15px 10px 0 20px;
   }
 </style>

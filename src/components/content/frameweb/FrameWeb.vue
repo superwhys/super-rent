@@ -9,7 +9,7 @@
         <page-head></page-head>
       </el-header>
       <el-main class="main">
-        <building-man></building-man>
+        <slot></slot>
       </el-main>
       <el-footer class="footer">Footer</el-footer>
     </el-container>

@@ -1,7 +1,10 @@
 <template>
   <div id="app" class="App">
-<!--    <login></login>-->
-    <frame-web></frame-web>
+    <frame-web>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
+    </frame-web>
   </div>
 </template>
 
