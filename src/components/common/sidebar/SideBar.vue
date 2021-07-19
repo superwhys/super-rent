@@ -6,7 +6,7 @@
         background-color="#002140"
         text-color="#fff"
         active-text-color="#ffd04b"
-        router="true">
+        :router=router>
       <el-submenu index="serivceCenter">
         <template slot="title">
           <i class="el-icon-odometer"></i>
@@ -45,6 +45,11 @@
 <script>
 export default {
   name: "SideBar",
+  data () {
+    return {
+      router: true
+    }
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);

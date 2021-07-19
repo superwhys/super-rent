@@ -1,6 +1,6 @@
 <template>
   <div class="main-head">
-    <div>
+    <div class="up">
       <span class="name">租客姓名 : </span>
       <el-input size="small" style="width: 115px" placeholder="请输入" v-model="nameInput"></el-input>
       <span class="status">状态 : </span>
@@ -12,7 +12,7 @@
       <el-button type="primary" size="small" class="search">查询</el-button>
       <el-button size="small">重置</el-button>
     </div>
-    <div class="operation">
+    <div class="down">
       <el-button icon="el-icon-plus" type="primary" size="small" @click="createClick">新建</el-button>
       <el-dropdown @command="handleCommand" trigger="click" class="batchOperation">
         <el-button size="small">批量操作</el-button>
@@ -61,15 +61,20 @@ export default {
     line-height: 55px;
   }
 
-  .name{
-
-  }
   .status {
     margin-left: 20px;
   }
 
   .search {
     margin-left: 20px;
+  }
+
+  .up {
+    height: 50px;
+  }
+
+  .down {
+    height: 50px;
   }
 
   .batchOperation {

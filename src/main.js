@@ -6,7 +6,8 @@ import {Container, Header, Aside, Main, Footer,
         Button, Input, Checkbox, Menu,
         MenuItemGroup, MenuItem, Row, Col,
         Submenu, Select, Option, Dropdown,
-        DropdownMenu, DropdownItem} from "element-ui";
+        DropdownMenu, DropdownItem, Table, TableColumn,
+        Pagination} from "element-ui";
 
 Vue.config.productionTip = false
 
@@ -29,6 +30,9 @@ Vue.use(Option)
 Vue.use(Dropdown)
 Vue.use(DropdownItem)
 Vue.use(DropdownMenu)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Pagination)
 
 
 new Vue({
