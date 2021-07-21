@@ -42,6 +42,8 @@ export default {
   }
 
   .main {
+    padding: 10px;
+    height: 715px;
   }
 
   .footer {

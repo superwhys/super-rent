@@ -6,7 +6,9 @@
         background-color="#002140"
         text-color="#fff"
         active-text-color="#ffd04b"
-        :router=router>
+        :router=router
+        ref="menu"
+        @close="handleClose">
       <el-submenu index="serivceCenter">
         <template slot="title">
           <i class="el-icon-odometer"></i>
@@ -51,8 +53,11 @@ export default {
     }
   },
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+    // serviceCenter 禁止关闭
+    handleClose(index, indexPath) {
+      if(index === 'serivceCenter'){
+        this.$refs.menu.open(indexPath)
+      }
     }
   }
 }
@@ -61,7 +66,8 @@ export default {
 <style scoped>
   .el-menu-vertical-demo {
     width: 213px;
-    min-height: calc(100vh)
+    min-height: calc(100vh);
+    border: none;
   }
 
 </style>

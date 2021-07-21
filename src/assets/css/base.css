@@ -27,7 +27,9 @@ body {
   background: var(--color-background);
   color: var(--color-text);
   /* rem vw/vh */
-  width: 100vw;
+  width: 100%;
+  min-width: 1390px;
+
   background-color: #F0F0F0;
   font-size: 12px;
   /*background-image: url("../img/login/background.png");*/
