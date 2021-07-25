@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import BuildingMan from "components/content/buildingMan/BuildingMan";
+import BuildingMan from "components/content/webmain/BuildingMan";
 
 export default {
   name: "House",

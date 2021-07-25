@@ -1,9 +1,9 @@
 <template>
-  <div class="build-man">
+  <div class="apart-main">
     <base-main>
       <div slot="table">
         <main-head class="head"></main-head>
-        <main-table></main-table>
+        <apartment-table></apartment-table>
       </div>
       <div slot="plot">
         <span>plot</span>
@@ -15,20 +15,20 @@
 <script>
 import BaseMain from "components/content/basemain/BaseMain";
 import MainHead from "components/common/mainhead/MainHead";
-import MainTable from "components/common/mainTable/MainTable";
+import ApartmentTable from "components/common/mainTable/ApartmentTable";
 
 export default {
-  name: "BuildingMan",
+  name: "ApartmentMain",
   components: {
     BaseMain,
     MainHead,
-    MainTable
+    ApartmentTable
   }
 }
 </script>
 
 <style scoped>
-  .build-man {
+  .apart-main {
     /*width: 790px;*/
     height: 693px;
     overflow: hidden;
@@ -37,4 +37,5 @@ export default {
   .head {
     margin: 10px 10px 0 20px;
   }
+
 </style>

@@ -34,6 +34,7 @@ Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Pagination)
 
+Vue.prototype.$bus = new Vue()
 
 new Vue({
   router,

@@ -3,13 +3,15 @@
     <div class="up">
       <span class="name">租客姓名 : </span>
       <el-input size="small" style="width: 115px" placeholder="请输入" v-model="nameInput"></el-input>
+      <span class="houseNum">房间(公寓)号 : </span>
+      <el-input size="small" style="width: 80px" placeholder="请输入" v-model="houseNumInput"></el-input>
       <span class="status">状态 : </span>
-      <el-select v-model="choseStatus" placeholder="请选择" size="small">
+      <el-select v-model="choseStatus" placeholder="请选择" size="small" class="status-chose">
         <el-option v-for="item in options"
                    :key="item.value" :label="item.label"
                    :value="item.value"></el-option>
       </el-select>
-      <el-button type="primary" size="small" class="search">查询</el-button>
+      <el-button type="primary" size="small" class="search" @click="searchClick">查询</el-button>
       <el-button size="small">重置</el-button>
     </div>
     <div class="down">
@@ -31,6 +33,7 @@ export default {
   data() {
     return {
       nameInput: '',
+      houseNumInput: '',
       choseStatus: '请选择',
       options: [{
         value: 'rent',
@@ -49,6 +52,10 @@ export default {
     createClick() {
       // TODO
       console.log('create');
+    },
+    searchClick() {
+      this.$bus.$emit('searchClick', {'name': this.nameInput, 'houseNum': this.houseNumInput})
+
     }
   }
 }
@@ -61,8 +68,12 @@ export default {
     line-height: 55px;
   }
 
-  .status {
+  .status, .houseNum{
     margin-left: 20px;
+  }
+
+  .status-chose {
+    width: 150px;
   }
 
   .search {

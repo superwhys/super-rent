@@ -1,12 +1,17 @@
 <template>
   <div>
-    公寓管理
+    <apartment-main></apartment-main>
   </div>
 </template>
 
 <script>
+import ApartmentMain from "components/content/webmain/ApartmentMain";
+
 export default {
-  name: "Apartment"
+  name: "Apartment",
+  components: {
+    ApartmentMain
+  }
 }
 </script>
 

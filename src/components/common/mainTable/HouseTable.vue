@@ -8,34 +8,8 @@
       </div>
     </div>
     <div class="table">
-      <el-table ref="multipleTable"
-                :data='showDatas'
-                tooltip-effect="dark"
-                style="width: 735px; margin: 10px auto 0"
-                :stripe=stripeBool
-                @selection-change="handleSelectionChange">
-        <el-table-column
-            type="selection"
-            width="55">
-        </el-table-column>
-        <el-table-column prop="homeNum" label="房间号" width="65px" align="center"></el-table-column>
-        <el-table-column prop="status" label="状态" width="65px" align="center"></el-table-column>
-        <el-table-column prop="personName" label="租客姓名" width="80px" align="center"></el-table-column>
-        <el-table-column prop="houseType" label="房间类型" width="80px" align="center"></el-table-column>
-        <el-table-column prop="price" label="租金" width="74px" align="center"></el-table-column>
-        <el-table-column prop="rentDate" label="租房时间" width="85x" align="center"></el-table-column>
-        <el-table-column prop="rentTotalMonth" label="出租月数" width="80px" align="center"></el-table-column>
-        <el-table-column
-            label="操作"
-            width="150"
-            align="center">
-          <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-            <el-button type="text" size="small">编辑</el-button>
-            <el-button type="text" size="small">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <base-table :show-datas="showDatas"
+                  @choseNum="choseNumChange"></base-table>
 
       <el-pagination
           background
@@ -53,11 +27,16 @@
 </template>
 
 <script>
+import BaseTable from "./BaseTable";
+
 export default {
-  name: "MainTable",
+  name: "HouseTable",
+  components: {
+    BaseTable
+  },
   data() {
     return {
-      // choseNum: 0,
+      choseNum: 0,
       chosePeopleNum: 0,
       stripeBool: true,
       pageSize: 7,
@@ -69,7 +48,7 @@ export default {
       {
         homeNum: 201,
         status: '已出租',
-        personName: '张三三',
+        personName: '张一山',
         houseType: '一房一厅',
         price: 550,
         rentDate: '2021-7-10',
@@ -267,7 +246,7 @@ export default {
         {
           homeNum: 502,
           status: '未出租',
-          personName: '张三三',
+          personName: '杨浩文',
           houseType: '一房一厅',
           price: 550,
           rentDate: '2021-7-10',
@@ -279,22 +258,27 @@ export default {
       multipleSelection: []
     }
   },
+  mounted() {
+    this.$bus.$on('searchClick', (searchItem) => {
+      this.showDatas = []
+      for(let item of this.tableDatas) {
+        if(item.personName === searchItem.name){
+          this.showDatas.push(item)
+          this.total = this.showDatas.length
+        }
+      }
+    })
+  },
   methods: {
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
     currentChange(page) {
-      // console.log(page);
       this.currentPage = page
       this.showDatas = this.tableDatas.slice(this.pageSize * (page - 1), this.pageSize * page)
+    },
+    choseNumChange(item) {
+      this.choseNum = item
+    }
+  },
 
-    }
-  },
-  computed: {
-    choseNum() {
-      return this.multipleSelection.length
-    }
-  },
   created() {
     this.total = this.tableDatas.length
     this.showDatas = this.tableDatas.slice(0, 7)

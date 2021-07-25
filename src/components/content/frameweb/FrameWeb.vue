@@ -1,5 +1,4 @@
 <template>
-
   <el-container>
     <el-aside width="213px" class="aside">
       <side-bar></side-bar>
@@ -19,7 +18,7 @@
 <script>
 import SideBar from "components/common/sidebar/SideBar";
 import PageHead from "components/common/pageheader/PageHead";
-import BuildingMan from "../buildingMan/BuildingMan";
+import BuildingMan from "components/content/webmain/BuildingMan";
 
 
 export default {
