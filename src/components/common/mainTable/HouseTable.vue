@@ -265,7 +265,6 @@ export default {
     this.$bus.$on('searchClick', (searchItem) => {
       console.log(searchItem)
       if (searchItem.name === "" && searchItem.houseNum === "") {
-        console.log('ttttt')
         this.currentChange(1)
         this.total = this.tableDatas.length
       }
@@ -275,21 +274,17 @@ export default {
         if (searchItem.name === "") {
           console.log('aaa')
           for(let item of this.tableDatas) {
-            if(item.homeNum == searchItem.houseNum) {
+            if(String(item.homeNum) === searchItem.houseNum) {
               this.flagData.push(item)
             }
           }
         }
         else if (searchItem.houseNum === "") {
-          for(let item of this.tableDatas) {
-            if(item.personName === searchItem.name){
-              this.flagData.push(item)
-            }
-          }
+          this.flagData = this.tableDatas.filter(data => data.personName.includes(searchItem.name))
         }
         else {
           for(let item of this.tableDatas) {
-            if(item.personName === searchItem.name & item.homeNum == searchItem.houseNum){
+            if(item.personName === searchItem.name && String(item.homeNum) === searchItem.houseNum){
               this.flagData.push(item)
             }
           }
