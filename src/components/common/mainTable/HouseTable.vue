@@ -267,6 +267,7 @@ export default {
           this.total = this.showDatas.length
         }
       }
+      console.log(this.total);
     })
   },
   methods: {
