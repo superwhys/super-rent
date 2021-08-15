@@ -264,7 +264,7 @@ export default {
   mounted() {
     this.$bus.$on('searchClick', (searchItem) => {
       console.log(searchItem)
-      if (searchItem.name === "" & searchItem.houseNum === "") {
+      if (searchItem.name === "" && searchItem.houseNum === "") {
         console.log('ttttt')
         this.currentChange(1)
         this.total = this.tableDatas.length

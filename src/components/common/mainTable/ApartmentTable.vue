@@ -257,13 +257,58 @@ export default {
 
       ],
       showDatas:[],
+      flagData: [],
       multipleSelection: []
     }
   },
+  mounted() {
+    this.$bus.$on('searchClick', (searchItem) => {
+      console.log(searchItem)
+      if (searchItem.name === "" && searchItem.houseNum === "") {
+        console.log('ttttt')
+        this.currentChange(1)
+        this.total = this.tableDatas.length
+      }
+      else {
+        this.showDatas = []
+        this.flagData = []
+        if (searchItem.name === "") {
+          console.log('aaa')
+          for(let item of this.tableDatas) {
+            if(item.homeNum == searchItem.houseNum) {
+              this.flagData.push(item)
+            }
+          }
+        }
+        else if (searchItem.houseNum === "") {
+          for(let item of this.tableDatas) {
+            if(item.personName === searchItem.name){
+              this.flagData.push(item)
+            }
+          }
+        }
+        else {
+          for(let item of this.tableDatas) {
+            if(item.personName === searchItem.name & item.homeNum == searchItem.houseNum){
+              this.flagData.push(item)
+            }
+          }
+        }
+        this.total = this.flagData.length
+        this.showDatas = this.flagData.length > 7 ? this.flagData.slice(0, 7) : this.flagData
+        this.currentPage = 1
+
+        // console.log(this.total);
+      }
+    })
+  },
   methods: {
     currentChange(page) {
+      if (this.flagData.length === 0){
+        this.flagData = this.tableDatas
+      }
       this.currentPage = page
-      this.showDatas = this.tableDatas.slice(this.pageSize * (page - 1), this.pageSize * page)
+      this.showDatas = this.flagData.slice(this.pageSize * (page - 1), this.pageSize * page)
     },
     choseNumChange(item) {
       this.choseNum = item
