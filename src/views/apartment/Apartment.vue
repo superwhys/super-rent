@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="apartment-main">
     <apartment-main></apartment-main>
   </div>
 </template>
@@ -16,5 +16,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .apartment-main {
+    height: 100%;
+  }
 </style>

@@ -32,7 +32,7 @@ export default {
   }
 
   .head {
-    margin: 0px 10px 0 20px;
+    margin: 0 10px 0 20px;
     width: 770px;
     height: 110px;
     line-height: 55px;
