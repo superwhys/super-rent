@@ -9,8 +9,10 @@
     </div>
     <div class="table">
       <base-table :show-datas="showDatas"
-                  @choseNum="choseNumChange"></base-table>
-
+                  @choseNum="choseNumChange">
+      </base-table>
+    </div>
+    <div class="pagination">
       <el-pagination
           background
           :hide-on-single-page='hideSingle'
@@ -20,7 +22,7 @@
           :pager-count='pageCount'
           :current-page="currentPage"
           @current-change='currentChange'
-          class="pagination">
+          style="float: right">
       </el-pagination>
     </div>
   </div>
@@ -296,9 +298,6 @@ export default {
         this.showDatas = this.flagData.length > 7 ? this.flagData.slice(0, 7) : this.flagData
         this.currentPage = 1
 
-        
-        
-        
         // console.log(this.total);
       }
     })
@@ -325,8 +324,7 @@ export default {
 
 <style scoped>
   .total {
-    /*display: flex;*/
-    width: 750px;
+    width: calc(100% - 10px);
     height: 39px;
     background-color: #E6F7FF;
     border: 1px solid #BAE7FF;
@@ -354,8 +352,14 @@ export default {
     margin-right: 20px;
   }
 
+  .table{
+    width: 100%;
+    height: 100%;
+  }
+
   .pagination {
-    float: right;
+    width: 100%;
+    height: 45px;
     margin-right: 20px;
     margin-top: 20px;
   }

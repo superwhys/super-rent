@@ -8,9 +8,10 @@
         <page-head></page-head>
       </el-header>
       <el-main class="main">
+        <!-- router -->
         <slot></slot>
       </el-main>
-      <el-footer class="footer">Footer</el-footer>
+      <el-footer height="60px" class="footer">Footer</el-footer>
     </el-container>
   </el-container>
 </template>
@@ -18,15 +19,12 @@
 <script>
 import SideBar from "components/common/sidebar/SideBar";
 import PageHead from "components/common/pageheader/PageHead";
-import BuildingMan from "components/content/webmain/BuildingMan";
-
 
 export default {
   name: "FrameWeb",
   components: {
     SideBar,
-    PageHead,
-    BuildingMan
+    PageHead
   }
 }
 </script>
@@ -42,7 +40,7 @@ export default {
 
   .main {
     padding: 10px;
-    height: 715px;
+    height: calc(100% - 320px);
   }
 
   .footer {

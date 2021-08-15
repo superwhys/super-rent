@@ -1,9 +1,7 @@
 <template>
-  <div>
+  <div class="build-main">
     <building-man></building-man>
   </div>
-
-
 </template>
 
 <script>
@@ -18,5 +16,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .build-main {
+    height: 100%;
+  }
 </style>

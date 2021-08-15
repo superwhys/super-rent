@@ -1,10 +1,14 @@
 <template>
-  <div class="base-main">
-    <div class="table">
-      <slot name="table"></slot>
+  <div>
+    <div class="info">
+      <div class="info-item-table">
+        <slot name="table"></slot>
+      </div>
     </div>
     <div class="plot">
-      <slot name="plot"></slot>
+      <div class="info-item-plot">
+        <slot name="plot"></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -16,18 +20,24 @@ export default {
 </script>
 
 <style scoped>
-  .table {
-    width: 790px;
-    height: 693px;
+
+  .info {
+    width: 72%;
+    height: 100%;
     float: left;
     background-color: #fff;
+    border-radius: 10px;
+    margin-right: 10px;
+  }
+
+  .info-item-table {
+    height: 100%;
   }
 
   .plot {
     background-color: gold;
-    width: 348px;
-    height: 472px;
+    width: 27%;
+    height: 100%;
     float: left;
-    margin-left: 10px;
   }
 </style>

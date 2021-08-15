@@ -1,5 +1,5 @@
 <template>
-  <div class="main-head">
+  <div>
     <div class="up">
       <span class="name">租客姓名 : </span>
       <el-input size="small" style="width: 115px" placeholder="请输入" v-model="nameInput"></el-input>
@@ -62,11 +62,6 @@ export default {
 </script>
 
 <style scoped>
-  .main-head {
-    width: 770px;
-    height: 110px;
-    line-height: 55px;
-  }
 
   .status, .houseNum{
     margin-left: 20px;
@@ -81,7 +76,8 @@ export default {
   }
 
   .up {
-    height: 50px;
+    height: 60px;
+    padding-top: 10px;
   }
 
   .down {

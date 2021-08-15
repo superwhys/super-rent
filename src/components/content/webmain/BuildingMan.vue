@@ -1,15 +1,13 @@
 <template>
-  <div class="build-man">
-    <base-main>
-      <div slot="table">
-        <main-head class="head"></main-head>
-        <house-table></house-table>
-      </div>
-      <div slot="plot">
-        <span>plot</span>
-      </div>
-    </base-main>
-  </div>
+  <base-main class="base-main">
+    <div slot="table">
+      <main-head class="head"></main-head>
+      <house-table class="house-table"></house-table>
+    </div>
+    <div slot="plot">
+      <span>plot</span>
+    </div>
+  </base-main>
 </template>
 
 <script>
@@ -28,13 +26,19 @@ export default {
 </script>
 
 <style scoped>
-  .build-man {
-    /*width: 790px;*/
-    height: 693px;
+  .base-main {
+    height: 100%;
     overflow: hidden;
   }
 
   .head {
-    margin: 10px 10px 0 20px;
+    margin: 0px 10px 0 20px;
+    width: 770px;
+    height: 110px;
+    line-height: 55px;
+  }
+
+  .house-table {
+    height: calc(100% - 110px);
   }
 </style>
