@@ -12,7 +12,7 @@
                    :value="item.value"></el-option>
       </el-select>
       <el-button type="primary" size="small" class="search" @click="searchClick">查询</el-button>
-      <el-button size="small">重置</el-button>
+      <el-button size="small" @click="resetClick">重置</el-button>
     </div>
     <div class="down">
       <el-button icon="el-icon-plus" type="primary" size="small" @click="createClick">新建</el-button>
@@ -55,7 +55,12 @@ export default {
     },
     searchClick() {
       this.$bus.$emit('searchClick', {'name': this.nameInput, 'houseNum': this.houseNumInput})
-
+    },
+    resetClick() {
+      this.nameInput = ""
+      this.houseNumInput = ""
+      this.$bus.$emit('resetClick')
+      this.$bus.$emit('searchClick', {'name': "", 'houseNum': ""})
     }
   }
 }

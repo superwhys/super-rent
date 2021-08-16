@@ -35,7 +35,9 @@ export default {
   }
 
   .header {
-    background-color: black;
+    background-color: #fff;
+    margin: 10px 10px 5px 10px;
+    border-radius: 10px;
   }
 
   .main {
