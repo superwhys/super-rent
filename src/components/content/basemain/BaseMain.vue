@@ -36,6 +36,7 @@ export default {
 
   .plot {
     background-color: gold;
+    border-radius: 10px;
     width: 27%;
     height: 100%;
     float: left;

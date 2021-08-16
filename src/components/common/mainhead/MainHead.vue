@@ -44,6 +44,9 @@ export default {
       }]
     }
   },
+  destroyed() {
+    this.$bus.$off('searchClick')
+  },
   methods: {
     handleCommand(command) {
       // TODO

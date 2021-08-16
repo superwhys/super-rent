@@ -1,9 +1,7 @@
 <template>
   <div id="app" class="App">
     <frame-web>
-      <keep-alive>
         <router-view></router-view>
-      </keep-alive>
     </frame-web>
   </div>
 </template>
