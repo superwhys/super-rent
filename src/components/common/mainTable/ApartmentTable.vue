@@ -267,12 +267,12 @@ export default {
       if (searchItem.name === "" && searchItem.houseNum === "") {
         this.currentChange(1)
         this.total = this.tableDatas.length
+        this.flagData = this.tableDatas
       }
       else {
         this.showDatas = []
         this.flagData = []
         if (searchItem.name === "") {
-          console.log('aaa')
           for(let item of this.tableDatas) {
             if(String(item.homeNum) === searchItem.houseNum) {
               this.flagData.push(item)
@@ -289,12 +289,10 @@ export default {
             }
           }
         }
-        this.total = this.flagData.length
-        this.showDatas = this.flagData.length > 7 ? this.flagData.slice(0, 7) : this.flagData
-        this.currentPage = 1
-
-        // console.log(this.total);
       }
+      this.total = this.flagData.length
+      this.showDatas = this.flagData.length > 7 ? this.flagData.slice(0, 7) : this.flagData
+      this.currentPage = 1
     })
   },
   methods: {

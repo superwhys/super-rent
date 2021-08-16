@@ -33,11 +33,12 @@ export default {
   .icon {
     line-height: 45px;
     float: right;
+    margin-right: 10px;
   }
 
   .icon i {
     font-size: 17px;
-    margin: 0 8px;
+    margin: 0 12px 0 0;
   }
 
   .icon i:hover {

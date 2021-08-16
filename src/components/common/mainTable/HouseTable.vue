@@ -264,15 +264,9 @@ export default {
   mounted() {
     this.$bus.$on('searchClick', (searchItem) => {
       console.log(searchItem)
-<<<<<<< HEAD
-      if (searchItem.name === "" & searchItem.houseNum === "") {
-        console.log('aa')
-=======
       if (searchItem.name === "" && searchItem.houseNum === "") {
->>>>>>> webyong
         this.currentChange(1)
         this.total = this.tableDatas.length
-
         this.flagData = this.tableDatas
       }
       else {
@@ -295,7 +289,6 @@ export default {
             }
           }
         }
-
       }
       this.total = this.flagData.length
       this.showDatas = this.flagData.length > 7 ? this.flagData.slice(0, 7) : this.flagData
