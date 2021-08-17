@@ -3,8 +3,8 @@
     <div class="total">
       <div class="inner-text">
         <i class="el-icon-warning"></i>
-        <span>已选择  <i class="choseNum">{{choseNum}}</i>项</span>
-        <span>租客总计: <i>{{chosePeopleNum}}</i>人</span>
+        <span>已选择  <i class="choseNum">{{ choseNum }}</i>项</span>
+        <span>租客总计: <i>{{ chosePeopleNum }}</i>人</span>
       </div>
     </div>
     <div class="table">
@@ -47,34 +47,34 @@ export default {
       total: 0,
       hideSingle: true,
       tableDatas: [
-      {
-        homeNum: 201,
-        status: '已出租',
-        personName: '张一山',
-        houseType: '一房一厅',
-        price: 550,
-        rentDate: '2021-7-10',
-        rentTotalMonth: '1个月'
-      },
-      {
-        homeNum: 202,
-        status: '未出租',
-        personName: '张三三',
-        houseType: '一房一厅',
-        price: 550,
-        rentDate: '2021-7-10',
-        rentTotalMonth: '1个月'
-      },
-      {
-        homeNum: 203,
-        status: '未出租',
-        personName: '张三三',
-        houseType: '一房一厅',
-        price: 550,
-        rentDate: '2021-7-10',
-        rentTotalMonth: '1个月'
-      },
-      {
+        {
+          homeNum: 201,
+          status: '已出租',
+          personName: '张一山',
+          houseType: '一房一厅',
+          price: 550,
+          rentDate: '2021-7-10',
+          rentTotalMonth: '1个月'
+        },
+        {
+          homeNum: 202,
+          status: '未出租',
+          personName: '张三三',
+          houseType: '一房一厅',
+          price: 550,
+          rentDate: '2021-7-10',
+          rentTotalMonth: '1个月'
+        },
+        {
+          homeNum: 203,
+          status: '未出租',
+          personName: '张三三',
+          houseType: '一房一厅',
+          price: 550,
+          rentDate: '2021-7-10',
+          rentTotalMonth: '1个月'
+        },
+        {
           homeNum: 204,
           status: '未出租',
           personName: '张三三',
@@ -82,34 +82,34 @@ export default {
           price: 550,
           rentDate: '2021-7-10',
           rentTotalMonth: '1个月'
-      },
-      {
-        homeNum: 205,
-        status: '未出租',
-        personName: '张三三',
-        houseType: '一房一厅',
-        price: 550,
-        rentDate: '2021-7-10',
-        rentTotalMonth: '1个月'
-      },
-      {
-        homeNum: 207,
-        status: '未出租',
-        personName: '张三三',
-        houseType: '一房一厅',
-        price: 550,
-        rentDate: '2021-7-10',
-        rentTotalMonth: '1个月'
-      },
-      {
-        homeNum: 207,
-        status: '未出租',
-        personName: '张三三',
-        houseType: '一房一厅',
-        price: 550,
-        rentDate: '2021-7-10',
-        rentTotalMonth: '1个月'
-      },
+        },
+        {
+          homeNum: 205,
+          status: '未出租',
+          personName: '张三三',
+          houseType: '一房一厅',
+          price: 550,
+          rentDate: '2021-7-10',
+          rentTotalMonth: '1个月'
+        },
+        {
+          homeNum: 207,
+          status: '未出租',
+          personName: '张三三',
+          houseType: '一房一厅',
+          price: 550,
+          rentDate: '2021-7-10',
+          rentTotalMonth: '1个月'
+        },
+        {
+          homeNum: 207,
+          status: '未出租',
+          personName: '张三三',
+          houseType: '一房一厅',
+          price: 550,
+          rentDate: '2021-7-10',
+          rentTotalMonth: '1个月'
+        },
         {
           homeNum: 301,
           status: '已出租',
@@ -264,32 +264,55 @@ export default {
   mounted() {
     this.$bus.$on('searchClick', (searchItem) => {
       console.log(searchItem)
-      if (searchItem.name === "" && searchItem.houseNum === "") {
-        this.currentChange(1)
-        this.total = this.tableDatas.length
-        this.flagData = this.tableDatas
+      let filterNameData = []
+      let filterHouseNumData = []
+
+      if (searchItem.name !== "") {
+        filterNameData = this.tableDatas.filter(data =>
+         data.personName.includes(searchItem.name));
+      } else {
+        filterNameData = this.tableDatas
       }
-      else {
-        this.showDatas = []
-        this.flagData = []
-        if (searchItem.name === "") {
-          for(let item of this.tableDatas) {
-            if(String(item.homeNum) === searchItem.houseNum) {
-              this.flagData.push(item)
-            }
-          }
-        }
-        else if (searchItem.houseNum === "") {
-          this.flagData = this.tableDatas.filter(data => data.personName.includes(searchItem.name))
-        }
-        else {
-          for(let item of this.tableDatas) {
-            if(item.personName === searchItem.name && String(item.homeNum) === searchItem.houseNum){
-              this.flagData.push(item)
-            }
-          }
-        }
+      console.log(filterNameData);
+      if (searchItem.houseNum !== "") {
+        filterHouseNumData = filterNameData.filter(data =>
+          data.homeNum === parseInt(searchItem.houseNum))
+      } else {
+        filterHouseNumData = filterNameData
       }
+      console.log(filterHouseNumData);
+      if (searchItem.choseStatus !== "请选择") {
+        this.flagData = filterHouseNumData.filter(data =>
+          data.status === searchItem.choseStatus)
+      } else {
+        this.flagData = filterHouseNumData
+      }
+
+      // if (searchItem.name === "" && searchItem.houseNum === "") {
+      //   this.currentChange(1)
+      //   this.total = this.tableDatas.length
+      //   this.flagData = this.tableDatas
+      // } else {
+      //   this.showDatas = []
+      //   this.flagData = []
+      //   if (searchItem.name === "") {
+      //     for (let item of this.tableDatas) {
+      //       if (String(item.homeNum) === searchItem.houseNum) {
+      //         this.flagData.push(item)
+      //       }
+      //     }
+      //   } else if (searchItem.houseNum === "") {
+      //     this.flagData = this.tableDatas.filter(data => data.personName.includes(searchItem.name))
+      //   } else {
+      //     for (let item of this.tableDatas) {
+      //       if (item.personName === searchItem.name && String(item.homeNum) === searchItem.houseNum) {
+      //         this.flagData.push(item)
+      //       }
+      //     }
+      //   }
+      // }
+
+
       this.total = this.flagData.length
       this.showDatas = this.flagData.length > 7 ? this.flagData.slice(0, 7) : this.flagData
       this.currentPage = 1
@@ -297,7 +320,7 @@ export default {
   },
   methods: {
     currentChange(page) {
-      if (this.flagData.length === 0){
+      if (this.flagData.length === 0) {
         this.flagData = this.tableDatas
       }
       this.currentPage = page
@@ -316,44 +339,44 @@ export default {
 </script>
 
 <style scoped>
-  .total {
-    width: calc(100% - 10px);
-    height: 39px;
-    background-color: #E6F7FF;
-    border: 1px solid #BAE7FF;
-    border-radius: 5px;
-    margin: 5px auto 0;
-  }
+.total {
+  width: calc(100% - 10px);
+  height: 39px;
+  background-color: #E6F7FF;
+  border: 1px solid #BAE7FF;
+  border-radius: 5px;
+  margin: 5px auto 0;
+}
 
-  .inner-text {
-    line-height: 39px;
-    margin-left: 10px;
-    overflow: hidden;
-  }
+.inner-text {
+  line-height: 39px;
+  margin-left: 10px;
+  overflow: hidden;
+}
 
-  .choseNum {
-    color: #1890FF;
-  }
+.choseNum {
+  color: #1890FF;
+}
 
-  .total i {
-    font-style: normal;
-    margin-right: 5px;
-    margin-left: 2px;
-  }
+.total i {
+  font-style: normal;
+  margin-right: 5px;
+  margin-left: 2px;
+}
 
-  .total span {
-    margin-right: 20px;
-  }
+.total span {
+  margin-right: 20px;
+}
 
-  .table{
-    width: 100%;
-    height: 100%;
-  }
+.table {
+  width: 100%;
+  height: 100%;
+}
 
-  .pagination {
-    width: 100%;
-    height: 45px;
-    margin-right: 20px;
-    margin-top: 20px;
-  }
+.pagination {
+  width: 100%;
+  height: 45px;
+  margin-right: 20px;
+  margin-top: 20px;
+}
 </style>

@@ -36,10 +36,10 @@ export default {
       houseNumInput: '',
       choseStatus: '请选择',
       options: [{
-        value: 'rent',
+        value: '已出租',
         label: '已出租'
       },{
-        value: 'norent',
+        value: '未出租',
         label: '未出租'
       }]
     }
@@ -57,13 +57,16 @@ export default {
       console.log('create');
     },
     searchClick() {
-      this.$bus.$emit('searchClick', {'name': this.nameInput, 'houseNum': this.houseNumInput})
+      this.$bus.$emit('searchClick', {'name': this.nameInput,
+                                                  'houseNum': this.houseNumInput,
+                                                  'choseStatus': this.choseStatus})
     },
     resetClick() {
       this.nameInput = ""
       this.houseNumInput = ""
-      this.$bus.$emit('resetClick')
-      this.$bus.$emit('searchClick', {'name': "", 'houseNum': ""})
+      this.choseStatus = "请选择"
+      // this.$bus.$emit('resetClick')
+      this.$bus.$emit('searchClick', {'name': "", 'houseNum': "", 'choseStatus': "请选择"})
     }
   }
 }
