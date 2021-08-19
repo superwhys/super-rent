@@ -65,7 +65,7 @@ export default {
 
 <style scoped>
   .el-menu-vertical-demo {
-    width: 213px;
+    /*width: 213px;*/
     min-height: calc(100vh);
     border: none;
   }

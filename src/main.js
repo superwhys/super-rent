@@ -7,7 +7,7 @@ import {Container, Header, Aside, Main, Footer,
         MenuItemGroup, MenuItem, Row, Col,
         Submenu, Select, Option, Dropdown,
         DropdownMenu, DropdownItem, Table, TableColumn,
-        Pagination} from "element-ui";
+        Pagination, Breadcrumb, BreadcrumbItem} from "element-ui";
 
 Vue.config.productionTip = false
 
@@ -33,6 +33,8 @@ Vue.use(DropdownMenu)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Pagination)
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
 
 Vue.prototype.$bus = new Vue()
 

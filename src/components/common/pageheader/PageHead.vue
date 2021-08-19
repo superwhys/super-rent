@@ -1,5 +1,14 @@
 <template>
-  <div>
+  <div class="head">
+    <div class="breadcrumb">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+        <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
+
     <div class="user">
       <div class="icon">
         <a><i class="el-icon-search"></i></a>
@@ -20,13 +29,22 @@ export default {
 </script>
 
 <style scoped>
-  .user {
-    width: 100%;
+  .breadcrumb{
+    display: inline-block;
+    float: left;
+    width: 300px;
     height: 40px;
-    /* background-color: green; */
+    margin-top: 15px;
   }
 
   .user {
+    height: 40px;
+    display: inline-block;
+    float: right;
+  }
+
+  .head {
+    height: 40px;
     border-bottom: 1px solid #F0F0F0
   }
 
