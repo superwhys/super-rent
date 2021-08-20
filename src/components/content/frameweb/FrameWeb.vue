@@ -5,7 +5,9 @@
     </el-aside>
     <el-container>
       <el-header height="160px" class="header">
-        <page-head></page-head>
+        <page-head>
+          <manage-head v-show="nowPath === '/Management'"></manage-head>
+        </page-head>
       </el-header>
       <el-main class="main">
         <!-- router -->
@@ -19,12 +21,25 @@
 <script>
 import SideBar from "components/common/sidebar/SideBar";
 import PageHead from "components/common/pageheader/PageHead";
+import ManageHead from "components/common/headtop/ManageHead";
 
 export default {
+
   name: "FrameWeb",
   components: {
     SideBar,
-    PageHead
+    PageHead,
+    ManageHead
+  },
+  data() {
+    return {
+      nowPath: '/Management'
+    }
+  },
+  watch: {
+    $route(to, from) {
+      this.nowPath = to.path
+    }
   }
 }
 </script>
