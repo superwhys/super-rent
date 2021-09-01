@@ -24,9 +24,8 @@ def get_unit_rent(db, rent_name: Optional[str] = None):
     get user: rent_name is a Optional parameter, if None, it will find all
     :param db:
     :param rent_name:
-    :return:
+    :return: 
     """
-    
     pass
 
 
