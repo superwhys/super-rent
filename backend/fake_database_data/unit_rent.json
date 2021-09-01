@@ -1,0 +1,35 @@
+[
+  {
+    "rentId": 1,
+    "rent_name": "宏发嘉域",
+    "rent_owner": "杨浩文",
+    "rent_admin": "杨浩文",
+    "isContract": false,
+    "rent_type": "公寓",
+    "rent_address": "光明区宏发嘉域",
+    "start_time": "2021-08-31",
+    "rent_room_num": 1
+  },
+  {
+    "rentId": 2,
+    "rent_name": "宏发天汇城",
+    "rent_owner": "杨浩文",
+    "rent_admin": "杨浩文",
+    "isContract": false,
+    "rent_type": "公寓",
+    "rent_address": "光明区宏发天汇城",
+    "start_time": "2021-08-31",
+    "rent_room_num": 1
+  },
+  {
+    "rentId": 3,
+    "rent_name": "出租屋1",
+    "rent_owner": "杨浩文",
+    "rent_admin": "杨浩文",
+    "isContract": false,
+    "rent_type": "楼栋",
+    "rent_address": "楼栋地址1楼栋地址1楼栋地址1楼栋地址1",
+    "start_time": "2021-08-31",
+    "rent_room_num": 30
+  }
+]

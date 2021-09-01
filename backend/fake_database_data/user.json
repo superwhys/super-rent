@@ -1,0 +1,14 @@
+[
+  {
+    "user_name": "admin",
+    "password": "123456",
+    "authority": "admin",
+    "phone": "1234567890"
+  },
+  {
+    "user_name": "yong",
+    "password": "0915",
+    "authority": "admin",
+    "phone": "18598070915"
+  }
+]
