@@ -9,11 +9,12 @@ const House = () => import('views/house/House')
 const Apartment = () => import('views/apartment/Apartment')
 const Store = () => import('views/store/Store')
 const Others = () => import('views/other/Other')
+const Login = () => import('views/login/login')
 
 const routes = [
   {
-    path: '',
-    redirect: '/Management'
+    path: '/',
+    redirect: '/login'
   },
   {
     path: '/Management',
