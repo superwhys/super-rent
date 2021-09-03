@@ -4,7 +4,7 @@
 # @Author: SuperYong
 # @Date  : 2021/9/211:23 下午
 # @Desc  :
-
+import json
 from json import loads
 import pymongo
 import re
@@ -29,7 +29,6 @@ def add_data_to_mongo(paths: list):
 
 
 if __name__ == '__main__':
-    
     bill_info_path = './bill_info.json'
     charges_path = './charges.json'
     tenant_path = './tenant.json'

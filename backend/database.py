@@ -7,15 +7,16 @@
 
 from pymongo import MongoClient
 
-client = MongoClient('mongodb://localhost:27017')
-db = client['super_rent']
+
+def get_client(ip):
+    return MongoClient(ip)
 
 
-def get_table(db_name, table_name):
+def get_table(db, table_name):
     """
     get mongodb table
-    :param db_name:
+    :param db:
     :param table_name:
     :return:
     """
-    return db_name[table_name]
+    return db[table_name]
