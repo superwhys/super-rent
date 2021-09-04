@@ -138,7 +138,6 @@ async def get_unit_rent(db: Database = Depends(get_db), token: str = Depends(oau
         raise credentials_exception
 
     # get different information according to different authority
-    unit_rent = {}
     unit_rent_lst = {}
     if authority == UserAuthority.owner:
         unit_rent = get_unit_rent_by_name(db, rent_owner=username)
