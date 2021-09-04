@@ -8,6 +8,8 @@
 import uvicorn
 from main import app
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 
 Applications = FastAPI(
     title='Super Rent API Docs',
@@ -15,6 +17,18 @@ Applications = FastAPI(
     version='0.0.1',
     docs_url='/docs',
     redoc_url='/redocs',
+)
+"No 'Access-Control-Allow-Origin' header is present on the requested resource."
+Applications.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        'http://127.0.0.1',
+        'http://127.0.0.1:8000',
+        'http://localhost:8080'
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 

@@ -68,21 +68,41 @@ def authenticate_user(username: str, password: str, db: Database):
     return user
 
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+def create_access_token(data: Optional[dict] = None,
+                        old_token: Optional[str] = None,
+                        expires_delta: Optional[timedelta] = None):
     """
     create token after certification
+    :param old_token:
     :param data:
     :param expires_delta:
     :return:
     """
-    to_encode = data.copy()
-    # time out
+
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    token = jwt.encode(claims=to_encode, key=SECRET_KEY, algorithm=ALGORITHM)
+        expire = datetime.utcnow() + timedelta(minutes=30)
+    # create new token
+    if old_token is None:
+        # time out
+        to_encode = data.copy()
+        to_encode.update({"exp": expire})
+        token = jwt.encode(claims=to_encode, key=SECRET_KEY, algorithm=ALGORITHM)
+    else:
+        logger.info('has old token')
+        to_encode = jwt.decode(token=old_token, key=SECRET_KEY, algorithms=[ALGORITHM])
+        old_token_date = to_encode.get('create_time')
+        old_token_date = datetime.strptime(old_token_date, "%Y-%m-%d %H:%M:%S")
+        # if the time interval is 20 minutes, update the token
+        if (datetime.now() - old_token_date).seconds > 1200:
+            logger.info('update old token')
+            to_encode['create_time'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            to_encode.update({"exp": expire})
+            token = jwt.encode(claims=to_encode, key=SECRET_KEY, algorithm=ALGORITHM)
+        else:
+            # not time out
+            token = old_token
     return token
 
 
@@ -103,12 +123,18 @@ async def login(username: str = Form(...), password: str = Form(...), db: Databa
         )
     # token expire time
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     access_token = create_access_token(
-        data={'sub': user.user_name, 'auth': user.authority},
+        data={'sub': user.user_name, 'auth': user.authority, 'create_time': now_time},
         expires_delta=access_token_expires
     )
     return {'access_token': access_token,
             'token_type': 'bearer'}
+
+
+@app.options("/get_unit_rent")
+async def get_unit_rent(db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+    return True
 
 
 @app.get("/get_unit_rent")

@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import {getUnitRent} from "network/UnitRent";
 import BaseTable from "./BaseTable";
 
 export default {
@@ -294,6 +295,9 @@ export default {
       this.showDatas = this.flagData.length > 7 ? this.flagData.slice(0, 7) : this.flagData
       this.currentPage = 1
     })
+
+    this.getUnitRentData()
+
   },
   methods: {
     currentChange(page) {
@@ -305,6 +309,14 @@ export default {
     },
     choseNumChange(item) {
       this.choseNum = item
+    },
+
+    // 网络请求
+    getUnitRentData() {
+      getUnitRent().then(res => {
+
+        // console.log(res)
+      })
     }
   },
 
