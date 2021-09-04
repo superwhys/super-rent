@@ -12,7 +12,7 @@ from fastapi import FastAPI
 Applications = FastAPI(
     title='Super Rent API Docs',
     description='Super Rent 租金管理平台API接口文档',
-    version='1.0.0',
+    version='0.0.1',
     docs_url='/docs',
     redoc_url='/redocs',
 )

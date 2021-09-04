@@ -6,10 +6,11 @@
 # @Desc  :
 from loguru import logger
 from typing import Optional
+from pymongo.database import Database
 from schemas import UnitRent, Tenant, User
 
 
-def get_user(db, user_name: str) -> dict:
+def get_user(db: Database, user_name: str) -> dict:
     """
     get user: it will find user_name in databases
     :param db:
@@ -20,7 +21,7 @@ def get_user(db, user_name: str) -> dict:
     return user
 
 
-async def create_user(db, user: User):
+def create_user(db: Database, user: User):
     """
     create user
     :param db:
@@ -28,7 +29,7 @@ async def create_user(db, user: User):
     :return:
     """
     try:
-        await db['user'].insert_one(user.dict())
+        db['user'].insert_one(user.dict())
     except Exception as e:
         logger.error(e)
         return False
@@ -36,29 +37,49 @@ async def create_user(db, user: User):
         return True
 
 
-async def get_unit_rent(db, rent_name: Optional[str] = None):
+def get_unit_rent_by_name(db: Database, rent_owner: Optional[str] = None, rent_admin: Optional[str] = None):
+    """
+    get unit_rent by name
+    :param db:
+    :param rent_owner:
+    :param rent_admin:
+    :return:
+    """
+    if rent_owner is None and rent_admin is None:
+        return False
+    if rent_owner and rent_admin:
+        unit_rent_lst = db['unit_rent'].find({'rent_owner': rent_owner, 'rent_admin': rent_admin}, {'_id': 0})
+    elif rent_owner:
+        unit_rent_lst = db['unit_rent'].find({'rent_owner': rent_owner}, {'_id': 0})
+    else:
+        unit_rent_lst = db['unit_rent'].find({'rent_admin': rent_admin}, {'_id': 0})
+
+    return list(unit_rent_lst)
+
+
+def get_unit_rent(db: Database, rent_name: Optional[str] = None):
     """
     get user: rent_name is a Optional parameter, if None, it will find all
     :param db:
     :param rent_name:
     :return: 
     """
-    return await db['unit_rent'].find({'rent_name': rent_name}, {"_id": 0})
+    return db['unit_rent'].find({'rent_name': rent_name}, {"_id": 0})
 
 
-async def get_unit_rent_room(db, unit_rent_name: str):
+def get_unit_rent_room(db: Database, unit_rent_name: str):
     """
     get the room in the given unit rent
     :param db:
     :param unit_rent_name:
     :return:
     """
-    unit_rent_id = await db['unit_rent'].find({'rent_name': unit_rent_name}, {'rentId': 1, "_id": 0})
-    rent_room_lst = await db['rent_room'].find({'unit_rent_id': unit_rent_id}, {"_id": 0})
+    unit_rent_id = db['unit_rent'].find({'rent_name': unit_rent_name}, {'rentId': 1, "_id": 0})
+    rent_room_lst = db['rent_room'].find({'unit_rent_id': unit_rent_id}, {"_id": 0})
     return rent_room_lst
 
 
-async def create_unit_rent(db, unit_rent: UnitRent):
+def create_unit_rent(db: Database, unit_rent: UnitRent):
     """
     create unit rent and put into database
     :param db:
@@ -66,7 +87,7 @@ async def create_unit_rent(db, unit_rent: UnitRent):
     :return:
     """
     try:
-        await db['unit_rent'].insert_one(unit_rent.dict())
+        db['unit_rent'].insert_one(unit_rent.dict())
     except Exception as e:
         logger.error(e)
         return False
@@ -74,7 +95,7 @@ async def create_unit_rent(db, unit_rent: UnitRent):
         return True
 
 
-async def create_tenant(db, tenant: Tenant):
+def create_tenant(db: Database, tenant: Tenant):
     """
     create tenant and put into database
     :param db:
@@ -82,14 +103,9 @@ async def create_tenant(db, tenant: Tenant):
     :return:
     """
     try:
-        await db['tenant'].insert_one(tenant.dict())
+        db['tenant'].insert_one(tenant.dict())
     except Exception as e:
         logger.error(e)
         return False
     else:
         return True
-
-
-
-
-

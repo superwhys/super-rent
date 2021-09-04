@@ -7,7 +7,7 @@
 
 import uvicorn
 from jose import JWTError, jwt
-from pymongo import MongoClient
+from pymongo.database import Database
 from typing import List, Optional
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
@@ -16,8 +16,11 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 from fastapi import APIRouter, Form, Depends, HTTPException, BackgroundTasks, status
 
-from schemas import Token, User
-from curd import get_user
+from schemas import Token, User, UnitRent, UnitRentLst
+from schemas import UserAuthority
+from curd import get_user, get_unit_rent_by_name
+
+from loguru import logger
 
 
 app = APIRouter()
@@ -26,9 +29,11 @@ app = APIRouter()
 def get_db():
     client = get_client('localhost:27017')
     try:
+        logger.info('get client')
         yield client['super_rent']
     finally:
         client.close()
+        logger.info('client close')
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -45,16 +50,16 @@ def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def authenticate_user(username: str, password: str, client: MongoClient):
+def authenticate_user(username: str, password: str, db: Database):
     """
     get the user from database and verify the password
+    :param db:
     :param username:
     :param password:
-    :param client:
     :return: user
     """
-    db = client['super_rent']
     _user = get_user(db, username)
+    logger.info(f'_user is : {_user}')
     user = User(**_user)
     if not user:
         return False
@@ -81,16 +86,14 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 
 @app.post("/login", response_model=Token)
-async def login(username: str = Form(...), password: str = Form(...)):
+async def login(username: str = Form(...), password: str = Form(...), db: Database = Depends(get_db)):
     """
+    :param db:
     :param username:
     :param password:
     :return:
     """
-    # async def login(form_data: OAuth2PasswordRequestForm = Depends()):
-    client = get_client("localhost:27017")
-    user = authenticate_user(username, password, client)
-    # user = authenticate_user(form_data.username, form_data.password, client)
+    user = authenticate_user(username, password, db)
     if not user:
         raise HTTPException(
             status.HTTP_401_UNAUTHORIZED,
@@ -100,8 +103,47 @@ async def login(username: str = Form(...), password: str = Form(...)):
     # token expire time
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={'sub': user.user_name},
+        data={'sub': user.user_name, 'auth': user.authority},
         expires_delta=access_token_expires
     )
     return {'access_token': access_token,
             'token_type': 'bearer'}
+
+
+@app.get("/get_unit_rent")
+async def get_unit_rent(db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+    """
+    Get the unit rent under the current account authority name
+    if account is contractor, it just show the unit rent it has
+    if account is owner, it will show all the unit rent it has
+    :param db:
+    :param token:
+    :return:
+    """
+    credentials_exception = HTTPException(
+        status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    # get the username and authority in token
+    try:
+        token_decode = jwt.decode(token, key=SECRET_KEY, algorithms=[ALGORITHM])
+        username = token_decode.get("sub")
+        if username is None:
+            raise credentials_exception
+
+        authority = token_decode.get('auth')
+    except JWTError:
+        raise credentials_exception
+
+    # get different information according to different authority
+    unit_rent = {}
+    unit_rent_lst = {}
+    if authority == UserAuthority.owner:
+        unit_rent = get_unit_rent_by_name(db, rent_owner=username)
+        unit_rent_lst = {'rent_owner': username, 'unit_rent_lst': unit_rent}
+    if authority == UserAuthority.contractor:
+        unit_rent = get_unit_rent_by_name(db, rent_admin=username)
+        unit_rent_lst = {'rent_admin': username, 'unit_rent_lst': unit_rent}
+    logger.info(f'get_unit_rent_by_name: {username}, {unit_rent_lst}')
+    return UnitRentLst(**unit_rent_lst)

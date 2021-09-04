@@ -8,6 +8,13 @@
 from enum import Enum
 from datetime import datetime
 from pydantic import BaseModel
+from typing import Optional, List
+
+
+class UserAuthority(str, Enum):
+    admin = "admin"
+    owner = "owner"
+    contractor = "contractor"
 
 
 class RentType(str, Enum):
@@ -17,9 +24,12 @@ class RentType(str, Enum):
 
 
 class RentStatus(str, Enum):
-    rent_and_paid = "已出租，本月已缴费"
-    rent_and_noPay = "已出租，本月未缴费"
-    no_rent = "未出租"
+    #  已出租，本月已缴费
+    rent_and_paid = "rent_and_paid"
+    # 已出租， 本月未缴费
+    rent_and_noPay = "rent_and_noPay"
+    # 未出租
+    no_rent = "no_rent"
 
 
 class Token(BaseModel):
@@ -30,7 +40,7 @@ class Token(BaseModel):
 class User(BaseModel):
     user_name: str
     password: str
-    authority: str
+    authority: UserAuthority
     phone: str
 
 
@@ -46,6 +56,12 @@ class UnitRent(BaseModel):
     rent_room_num: int
 
 
+class UnitRentLst(BaseModel):
+    rent_owner: Optional[str] = None
+    rent_admin: Optional[str] = None
+    unit_rent_lst: List[UnitRent]
+
+
 class RentRoom(BaseModel):
     unit_rent_room_id: int
     unit_rent__id: int
@@ -57,7 +73,6 @@ class RentRoom(BaseModel):
     rent: int
     status: RentStatus
     use_info_id: int
-
 
 
 class Tenant(BaseModel):
