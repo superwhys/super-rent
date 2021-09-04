@@ -5,20 +5,20 @@
 # @Date  : 2021/9/19:55 下午
 # @Desc  : FastApi main
 
-import uvicorn
-from jose import JWTError, jwt
+from database import get_client
 from pymongo.database import Database
-from typing import List, Optional
-from passlib.context import CryptContext
-from datetime import datetime, timedelta
-from database import get_client, get_table
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
-from fastapi import APIRouter, Form, Depends, HTTPException, BackgroundTasks, status
-
-from schemas import Token, User, UnitRent, UnitRentLst
-from schemas import UserAuthority
 from curd import get_user, get_unit_rent_by_name
+
+from typing import Optional
+from datetime import datetime, timedelta
+from schemas import Token, User, UnitRentLst, UserAuthority
+
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+
+from fastapi.security import OAuth2PasswordBearer
+from fastapi import APIRouter, Form, Depends, HTTPException, status
 
 from loguru import logger
 
@@ -76,13 +76,14 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     :return:
     """
     to_encode = data.copy()
+    # time out
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
         expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(claims=to_encode, key=SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    token = jwt.encode(claims=to_encode, key=SECRET_KEY, algorithm=ALGORITHM)
+    return token
 
 
 @app.post("/login", response_model=Token)
