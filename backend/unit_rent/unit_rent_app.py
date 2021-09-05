@@ -25,7 +25,8 @@ unit_rent_app = APIRouter(
 
 
 @unit_rent_app.get("/get_unit_rent",
-                   summary='获取某账号名下所有出租单位')
+                   summary='获取某账号名下所有出租单位',
+                   description='参数：无, 需在headers中携带登录后的token, 字段为Authorization')
 async def get_unit_rent(db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     """
     Get the unit rent under the current account authority name
@@ -52,7 +53,8 @@ async def get_unit_rent(db: Database = Depends(get_db), token: str = Depends(oau
 
 
 @unit_rent_app.get("/unit_rent_info",
-                   summary='获取某出租单位下所有出租单元')
+                   summary='获取某出租单位下所有出租单元',
+                   description='参数：rent_name -> 出租单位名称, 需在headers中携带登录后的token, 字段为Authorization')
 async def get_unit_rent_info(rent_name: str, db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     """
     :param rent_name:

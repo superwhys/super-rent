@@ -22,7 +22,8 @@ user_app = APIRouter()
 
 
 @user_app.post("/login", response_model=Token,
-               summary='登录')
+               summary='登录',
+               description='POST请求, 传递用户名和密码参数')
 async def login(username: str = Form(...), password: str = Form(...), db: Database = Depends(get_db)):
     """
     :param db:
@@ -49,7 +50,8 @@ async def login(username: str = Form(...), password: str = Form(...), db: Databa
 
 
 @user_app.post("/register", response_model=RegisterStatus,
-               summary='注册')
+               summary='注册',
+               description='POST请求, 传递: 用户名, 密码, 权限, 手机号 四个参数')
 async def register(user: User, db: Database = Depends(get_db)):
     """
     :param user:
