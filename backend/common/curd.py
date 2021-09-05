@@ -6,7 +6,7 @@
 from loguru import logger
 from typing import Optional
 from pymongo.database import Database
-from schemas import UnitRent, Tenant, User
+from common.schemas import UnitRent, Tenant, User
 
 
 def get_user(db: Database, user_name: str):

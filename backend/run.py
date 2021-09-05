@@ -5,9 +5,11 @@
 # @Desc  :
 
 import uvicorn
-from main import app
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from user.user_app import user_app
+from unit_rent.unit_rent_app import unit_rent_app
 
 
 Applications = FastAPI(
@@ -20,19 +22,14 @@ Applications = FastAPI(
 
 Applications.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        'http://127.0.0.1',
-        'http://127.0.0.1:8000',
-        'http://localhost:8080'
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-Applications.include_router(app, prefix='/rent', tags=['API接口'])
-
+Applications.include_router(user_app, prefix='/rent/user', tags=['用户相关 API接口'])
+Applications.include_router(unit_rent_app, prefix='/rent/unit', tags=['出租单位相关 API接口'])
 
 if __name__ == '__main__':
     uvicorn.run('run:Applications', host='0.0.0.0', port=8001, reload=True, debug=True, workers=1)
