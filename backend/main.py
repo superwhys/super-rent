@@ -6,11 +6,11 @@
 
 from database import get_client
 from pymongo.database import Database
-from curd import get_user, get_unit_rent_by_name
+from curd import get_user, create_user, get_unit_rent_by_name
 
 from typing import Optional
 from datetime import datetime, timedelta
-from schemas import Token, User, UnitRentLst, UserAuthority
+from schemas import Token, RegisterStatus, User, UnitRentLst, UserAuthority
 
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -21,13 +21,12 @@ from fastapi import APIRouter, Form, Depends, HTTPException, status
 
 from loguru import logger
 
-
 app = APIRouter()
 
 
 def get_db():
-    # client = get_client(host="127.0.0.1", port=27017)
-    client = get_client(host="mongo", port=27017)
+    client = get_client(host="127.0.0.1", port=27017)
+    # client = get_client(host="mongo", port=27017)
     try:
         logger.info('get client')
         yield client['super_rent']
@@ -130,6 +129,29 @@ async def login(username: str = Form(...), password: str = Form(...), db: Databa
     )
     return {'access_token': access_token,
             'token_type': 'bearer'}
+
+
+@app.post("/register", response_model=RegisterStatus)
+async def register(user: User, db: Database = Depends(get_db)):
+    """
+    :param user:
+    :param db:
+    :return:
+    """
+    if get_user(db, user.user_name):
+        return {'status': False, 'msg': 'this username has been register'}
+    user.password = pwd_context.hash(user.password)
+    if create_user(db, user):
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        access_token = create_access_token(
+            data={'sub': user.user_name, 'auth': user.authority, 'create_time': now_time},
+            expires_delta=access_token_expires
+        )
+        return {'status': True, 'token': {'access_token': access_token,
+                                          'token_type': 'bearer'}}
+    else:
+        return {'status': False, 'msg': 'Interface exception'}
 
 
 @app.get("/get_unit_rent")

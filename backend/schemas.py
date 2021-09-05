@@ -36,6 +36,12 @@ class Token(BaseModel):
     token_type: str
 
 
+class RegisterStatus(BaseModel):
+    status: bool
+    msg: Optional[str] = None
+    token: Optional[Token] = None
+
+
 class User(BaseModel):
     user_name: str
     password: str

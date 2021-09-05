@@ -9,7 +9,7 @@ from pymongo.database import Database
 from schemas import UnitRent, Tenant, User
 
 
-def get_user(db: Database, user_name: str) -> dict:
+def get_user(db: Database, user_name: str):
     """
     get user: it will find user_name in databases
     :param db:
