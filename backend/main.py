@@ -26,8 +26,8 @@ app = APIRouter()
 
 
 def get_db():
-    client = get_client(host="127.0.0.1", port=27017)
-    # client = get_client(host="mongo", port=27017)
+    # client = get_client(host="127.0.0.1", port=27017)
+    client = get_client(host="mongo", port=27017)
     try:
         logger.info('get client')
         yield client['super_rent']

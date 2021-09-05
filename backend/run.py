@@ -17,7 +17,7 @@ Applications = FastAPI(
     docs_url='/docs',
     redoc_url='/redocs',
 )
-"No 'Access-Control-Allow-Origin' header is present on the requested resource."
+
 Applications.add_middleware(
     CORSMiddleware,
     allow_origins=[
