@@ -65,7 +65,6 @@ async def get_unit_rent_info(rent_name: str, db: Database = Depends(get_db), tok
     unit_rent_id = get_unit_rent_id(db, rent_name, username, authority)
     if unit_rent_id:
         rent_room_lst = get_rent_room_by_rent_id(db, int(unit_rent_id['rentId']))
-        logger.info(rent_room_lst[0])
         return RentRoomLst(**{'status': RequestStatus.success,
                               'unit_rent_id': int(unit_rent_id['rentId']),
                               'rent_room_lst': rent_room_lst})
