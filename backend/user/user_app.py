@@ -13,6 +13,7 @@ from common.curd import get_user, create_user
 from common.schemas import Token, RegisterStatus, User
 from common.general_module import create_access_token, authenticate_user
 
+from descriptions import login_desc, register_desc
 from config import ACCESS_TOKEN_EXPIRE_MINUTES, pwd_context
 
 from fastapi import APIRouter, Form, Depends, HTTPException, status
@@ -23,7 +24,7 @@ user_app = APIRouter()
 
 @user_app.post("/login", response_model=Token,
                summary='登录',
-               description='POST请求, 传递用户名和密码参数')
+               description=login_desc)
 async def login(username: str = Form(...), password: str = Form(...), db: Database = Depends(get_db)):
     """
     :param db:
@@ -51,7 +52,7 @@ async def login(username: str = Form(...), password: str = Form(...), db: Databa
 
 @user_app.post("/register", response_model=RegisterStatus,
                summary='注册',
-               description='POST请求, 传递: 用户名, 密码, 权限, 手机号 四个参数')
+               description=register_desc)
 async def register(user: User, db: Database = Depends(get_db)):
     """
     :param user:

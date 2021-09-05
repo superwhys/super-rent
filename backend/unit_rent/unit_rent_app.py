@@ -8,8 +8,9 @@
 from loguru import logger
 from pymongo.database import Database
 
-from jose import JWTError, jwt
-from config import SECRET_KEY, ALGORITHM, oauth2_schema, credentials_exception
+
+from config import oauth2_schema
+from descriptions import get_unit_rent_desc, get_unit_rent_info_desc
 
 from common.database import get_db
 from common.curd import get_unit_rent_by_name, get_unit_rent_id, get_rent_room_by_rent_id
@@ -26,7 +27,7 @@ unit_rent_app = APIRouter(
 
 @unit_rent_app.get("/get_unit_rent",
                    summary='获取某账号名下所有出租单位',
-                   description='参数：无, 需在headers中携带登录后的token, 字段为Authorization')
+                   description=get_unit_rent_desc)
 async def get_unit_rent(db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     """
     Get the unit rent under the current account authority name
@@ -54,7 +55,7 @@ async def get_unit_rent(db: Database = Depends(get_db), token: str = Depends(oau
 
 @unit_rent_app.get("/unit_rent_info",
                    summary='获取某出租单位下所有出租单元',
-                   description='参数：rent_name -> 出租单位名称, 需在headers中携带登录后的token, 字段为Authorization')
+                   description=get_unit_rent_info_desc)
 async def get_unit_rent_info(rent_name: str, db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     """
     :param rent_name:
