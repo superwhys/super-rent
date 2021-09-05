@@ -10,6 +10,16 @@ from pydantic import BaseModel
 from typing import Optional, List
 
 
+class RequestStatus(str, Enum):
+    success = "success"
+    error = "error"
+
+
+class RentBase(BaseModel):
+    status: RequestStatus
+    msg: Optional[str]
+
+
 class UserAuthority(str, Enum):
     admin = "admin"
     owner = "owner"
@@ -24,11 +34,11 @@ class RentType(str, Enum):
 
 class RentStatus(str, Enum):
     #  已出租，本月已缴费
-    rent_and_paid = "rent_and_paid"
+    rent_and_paid = "已出租，本月已缴费"
     # 已出租， 本月未缴费
-    rent_and_noPay = "rent_and_noPay"
+    rent_and_noPay = "已出租，本月未缴费"
     # 未出租
-    no_rent = "no_rent"
+    no_rent = "未出租"
 
 
 class Token(BaseModel):
@@ -69,7 +79,7 @@ class UnitRentLst(BaseModel):
 
 class RentRoom(BaseModel):
     unit_rent_room_id: int
-    unit_rent__id: int
+    unit_rent_id: int
     tenant_id: int
     room: str
     room_type: str
@@ -87,3 +97,8 @@ class Tenant(BaseModel):
     unit_rent_root_id: int
     phone: str
     id_card: str
+
+
+class RentRoomLst(RentBase):
+    unit_rent_id: Optional[int]
+    rent_room_lst: Optional[List[RentRoom]] = None

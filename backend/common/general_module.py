@@ -10,11 +10,11 @@ from typing import Optional
 from pymongo.database import Database
 from datetime import datetime, timedelta
 
-from jose import jwt
 from common.curd import get_user
 from common.schemas import User
-from config import SECRET_KEY, ALGORITHM, pwd_context
+from config import SECRET_KEY, ALGORITHM, pwd_context, credentials_exception
 
+from jose import jwt, JWTError
 from fastapi import Request, HTTPException, status
 
 
@@ -26,6 +26,24 @@ def verify_password(plain_password: str, hashed_password: str):
     :return:
     """
     return pwd_context.verify(plain_password, hashed_password)
+
+
+def get_user_name_in_token(token):
+    """
+    :param token:
+    :return:
+    """
+    # get the username and authority in token
+    try:
+        token_decode = jwt.decode(token, key=SECRET_KEY, algorithms=[ALGORITHM])
+        username = token_decode.get("sub")
+        if username is None:
+            raise credentials_exception
+        authority = token_decode.get('auth')
+    except JWTError:
+        raise credentials_exception
+    else:
+        return username, authority
 
 
 def authenticate_user(username: str, password: str, db: Database):

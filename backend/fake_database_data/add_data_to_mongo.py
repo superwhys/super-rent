@@ -12,8 +12,8 @@ import re
 def add_data_to_mongo(paths: list):
     table_name_re = r"\.\/(.*?)\.json"
 
-    # client = pymongo.MongoClient('mongodb://127.0.0.1:27017')
-    client = pymongo.MongoClient('mongodb://superyong.top:27018')
+    client = pymongo.MongoClient('mongodb://127.0.0.1:27017')
+    # client = pymongo.MongoClient('mongodb://superyong.top:27018')
     # client = pymongo.MongoClient(host="mongo", port=27017)
     db = client['super_rent']
 
@@ -37,7 +37,9 @@ if __name__ == '__main__':
     rent_room_path = './rent_room.json'
     user_path = './user.json'
 
-    path_lst = [bill_info_path, charges_path, tenant_path,
-                unit_rent_path, rent_room_path, user_path]
+    # path_lst = [bill_info_path, charges_path, tenant_path,
+    #             unit_rent_path, rent_room_path, user_path]
+
+    path_lst = [rent_room_path]
 
     add_data_to_mongo(path_lst)

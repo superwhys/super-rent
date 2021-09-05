@@ -6,7 +6,7 @@
 from loguru import logger
 from typing import Optional
 from pymongo.database import Database
-from common.schemas import UnitRent, Tenant, User
+from common.schemas import UnitRent, Tenant, User, UserAuthority
 
 
 def get_user(db: Database, user_name: str):
@@ -107,3 +107,30 @@ def create_tenant(db: Database, tenant: Tenant):
         return False
     else:
         return True
+
+
+def get_unit_rent_id(db: Database, rent_name: str, username: str, authority: str):
+    """
+    :param authority:
+    :param username:
+    :param db:
+    :param rent_name:
+    :return:
+    """
+    if authority == UserAuthority.owner:
+        rent_id = db['unit_rent'].find_one({'rent_name': rent_name, 'rent_owner': username}, {'_id': 0, 'rentId': 1})
+    elif authority == UserAuthority.contractor:
+        rent_id = db['unit_rent'].find_one({'rent_name': rent_name, 'rent_admin': username}, {'_id': 0, 'rentId': 1})
+    else:
+        rent_id = None
+    return rent_id
+
+
+def get_rent_room_by_rent_id(db: Database, rent_id: int):
+    """
+    :param db:
+    :param rent_id:
+    :return:
+    """
+    rent_room = db['rent_room'].find({'unit_rent_id': rent_id}, {'_id': 0})
+    return list(rent_room)

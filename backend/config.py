@@ -5,6 +5,7 @@
 # @Desc  : const file
 
 from fastapi.security import OAuth2PasswordBearer
+from fastapi import HTTPException, status
 from passlib.context import CryptContext
 
 
@@ -14,3 +15,9 @@ ALGORITHM = "HS256"
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="/rent/user/login")
+
+credentials_exception = HTTPException(
+        status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
