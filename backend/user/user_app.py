@@ -21,7 +21,8 @@ from fastapi import APIRouter, Form, Depends, HTTPException, status
 user_app = APIRouter()
 
 
-@user_app.post("/login", response_model=Token)
+@user_app.post("/login", response_model=Token,
+               summary='登录')
 async def login(username: str = Form(...), password: str = Form(...), db: Database = Depends(get_db)):
     """
     :param db:
@@ -47,7 +48,8 @@ async def login(username: str = Form(...), password: str = Form(...), db: Databa
             'token_type': 'bearer'}
 
 
-@user_app.post("/register", response_model=RegisterStatus)
+@user_app.post("/register", response_model=RegisterStatus,
+               summary='注册')
 async def register(user: User, db: Database = Depends(get_db)):
     """
     :param user:
