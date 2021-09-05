@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# coding=gbk
 # @File  : add_data_to_mongo.py
 # @Author: SuperYong
-# @Date  : 2021/9/211:23 ‰∏ãÂçà
+# @Date  : 2021/9/211:23 œ¬ŒÁ
 # @Desc  :
 import json
 from json import loads
@@ -13,7 +12,9 @@ import re
 def add_data_to_mongo(paths: list):
     table_name_re = r"\.\/(.*?)\.json"
 
-    client = pymongo.MongoClient('mongodb://localhost:27017')
+    client = pymongo.MongoClient('mongodb://127.0.0.1:27017')
+    # client = pymongo.MongoClient('mongodb://superyong.top:27018')
+    # client = pymongo.MongoClient(host="mongo", port=27017)
     db = client['super_rent']
 
     for path in paths:

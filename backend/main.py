@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# coding=gbk
 # @File  : main.py
 # @Author: SuperYong
-# @Date  : 2021/9/19:55 ä¸‹åˆ
+# @Date  : 2021/9/19:55 ÏÂÎç
 # @Desc  : FastApi main
 
 from database import get_client
@@ -27,7 +26,8 @@ app = APIRouter()
 
 
 def get_db():
-    client = get_client('localhost:27017')
+    client = get_client(host="127.0.0.1", port=27017)
+    # client = get_client(host="mongo", port=27017)
     try:
         logger.info('get client')
         yield client['super_rent']
@@ -132,11 +132,6 @@ async def login(username: str = Form(...), password: str = Form(...), db: Databa
             'token_type': 'bearer'}
 
 
-@app.options("/get_unit_rent")
-async def get_unit_rent(db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
-    return True
-
-
 @app.get("/get_unit_rent")
 async def get_unit_rent(db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     """
@@ -165,11 +160,13 @@ async def get_unit_rent(db: Database = Depends(get_db), token: str = Depends(oau
 
     # get different information according to different authority
     unit_rent_lst = {}
+    unit_rent = []
+    if authority == UserAuthority.admin:
+        unit_rent = get_unit_rent_by_name(db)
     if authority == UserAuthority.owner:
         unit_rent = get_unit_rent_by_name(db, rent_owner=username)
-        unit_rent_lst = {'rent_owner': username, 'unit_rent_lst': unit_rent}
     if authority == UserAuthority.contractor:
         unit_rent = get_unit_rent_by_name(db, rent_admin=username)
-        unit_rent_lst = {'rent_admin': username, 'unit_rent_lst': unit_rent}
+    unit_rent_lst = {'rent_owner': username, 'unit_rent_lst': unit_rent}
     logger.info(f'get_unit_rent_by_name: {username}, {unit_rent_lst}')
     return UnitRentLst(**unit_rent_lst)

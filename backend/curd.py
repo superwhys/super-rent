@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# coding=gbk
 # @File  : curd.py
 # @Author: SuperYong
-# @Date  : 2021/9/19:55 ä¸‹åˆ
+# @Date  : 2021/9/19:55 ÏÂÎç
 # @Desc  :
 from loguru import logger
 from typing import Optional
@@ -46,14 +45,13 @@ def get_unit_rent_by_name(db: Database, rent_owner: Optional[str] = None, rent_a
     :return:
     """
     if rent_owner is None and rent_admin is None:
-        return False
-    if rent_owner and rent_admin:
+        unit_rent_lst = db['unit_rent'].find({}, {'_id': 0})
+    elif rent_owner and rent_admin:
         unit_rent_lst = db['unit_rent'].find({'rent_owner': rent_owner, 'rent_admin': rent_admin}, {'_id': 0})
     elif rent_owner:
         unit_rent_lst = db['unit_rent'].find({'rent_owner': rent_owner}, {'_id': 0})
     else:
         unit_rent_lst = db['unit_rent'].find({'rent_admin': rent_admin}, {'_id': 0})
-
     return list(unit_rent_lst)
 
 

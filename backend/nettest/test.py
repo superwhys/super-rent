@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# coding=gbk
 # @File  : test.py
 # @Author: SuperYong
-# @Date  : 2021/9/47:20 ä¸‹åˆ
+# @Date  : 2021/9/47:20 ÏÂÎç
 # @Desc  :
 
 import requests

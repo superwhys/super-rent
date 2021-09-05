@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# coding=gbk
 # @File  : config.py
 # @Author: SuperYong
-# @Date  : 2021/9/311:02 ‰∏ãÂçà
+# @Date  : 2021/9/311:02 œ¬ŒÁ
 # @Desc  : const file
 
 SECRET_KEY = "fe8a711ed3fcc1ba9e56d35369ebc589bc420d6bf474eed24b878b7a09e9ed96"

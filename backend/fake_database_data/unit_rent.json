@@ -7,7 +7,7 @@
     "isContract": false,
     "rent_type": "公寓",
     "rent_address": "光明区宏发嘉域",
-    "start_time": "2021-08-31",
+    "start_time": "2021-08-31 22:30",
     "rent_room_num": 1
   },
   {
@@ -18,7 +18,7 @@
     "isContract": false,
     "rent_type": "公寓",
     "rent_address": "光明区宏发天汇城",
-    "start_time": "2021-08-31",
+    "start_time": "2021-08-31 22:30",
     "rent_room_num": 1
   },
   {
@@ -29,7 +29,7 @@
     "isContract": false,
     "rent_type": "楼栋",
     "rent_address": "楼栋地址1楼栋地址1楼栋地址1楼栋地址1",
-    "start_time": "2021-08-31",
+    "start_time": "2021-08-31 22:30",
     "rent_room_num": 30
   }
 ]

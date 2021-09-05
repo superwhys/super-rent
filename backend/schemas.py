@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# coding=gbk
 # @File  : schemas.py
 # @Author: SuperYong
-# @Date  : 2021/9/19:55 ä¸‹åˆ
+# @Date  : 2021/9/19:55 ÏÂÎç
 # @Desc  : Field constraint
 
 from enum import Enum
@@ -18,17 +17,17 @@ class UserAuthority(str, Enum):
 
 
 class RentType(str, Enum):
-    apartment = "å…¬å¯“"
-    shop = "åº—é“º"
-    building = "æ¥¼æ ‹"
+    apartment = "¹«Ô¢"
+    shop = "µêÆÌ"
+    building = "Â¥¶°"
 
 
 class RentStatus(str, Enum):
-    #  å·²å‡ºç§Ÿï¼Œæœ¬æœˆå·²ç¼´è´¹
+    #  ÒÑ³ö×â£¬±¾ÔÂÒÑ½É·Ñ
     rent_and_paid = "rent_and_paid"
-    # å·²å‡ºç§Ÿï¼Œ æœ¬æœˆæœªç¼´è´¹
+    # ÒÑ³ö×â£¬ ±¾ÔÂÎ´½É·Ñ
     rent_and_noPay = "rent_and_noPay"
-    # æœªå‡ºç§Ÿ
+    # Î´³ö×â
     no_rent = "no_rent"
 
 

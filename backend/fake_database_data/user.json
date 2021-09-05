@@ -1,14 +1,14 @@
 [
   {
     "user_name": "admin",
-    "password": "123456",
+    "password": "$2b$12$fKuXXHxDRfLa7mUNr/kHyuLFHstVbHWexq7W9k95gdTquibro.LZG",
     "authority": "admin",
     "phone": "1234567890"
   },
   {
-    "user_name": "yong",
-    "password": "0915",
-    "authority": "admin",
+    "user_name": "杨浩文",
+    "password": "$2b$12$J.tJgF8rK/MhQqBXT3HvxeOmbmZTafmPyyYBLAwrilG88/v9UEaem",
+    "authority": "owner",
     "phone": "18598070915"
   }
 ]

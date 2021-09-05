@@ -1,6 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# coding=gbk
 # @File  : model.py
 # @Author: SuperYong
-# @Date  : 2021/9/19:55 ä¸‹åˆ
+# @Date  : 2021/9/19:55 ÏÂÎç
 # @Desc  :

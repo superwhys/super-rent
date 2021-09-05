@@ -1,15 +1,14 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# coding=gbk
 # @File  : database.py
 # @Author: SuperYong
-# @Date  : 2021/9/19:54 ä¸‹åˆ
+# @Date  : 2021/9/19:54 ÏÂÎç
 # @Desc  : database setting
 
 from pymongo import MongoClient
 
 
-def get_client(ip):
-    return MongoClient(ip)
+def get_client(host, port):
+    return MongoClient(host, port)
 
 
 def get_table(db, table_name):

@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# coding=gbk
 # @File  : run.py
 # @Author: SuperYong
-# @Date  : 2021/9/412:16 涓婂崍
+# @Date  : 2021/9/412:16 上午
 # @Desc  :
 
 import uvicorn
@@ -13,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 Applications = FastAPI(
     title='Super Rent API Docs',
-    description='Super Rent 绉熼噾绠＄悊骞冲彴API鎺ュ彛鏂囨。',
+    description='Super Rent 租金管理平台API接口文档',
     version='0.0.1',
     docs_url='/docs',
     redoc_url='/redocs',
@@ -32,8 +31,8 @@ Applications.add_middleware(
 )
 
 
-Applications.include_router(app, prefix='/rent', tags=['API鎺ュ彛'])
+Applications.include_router(app, prefix='/rent', tags=['API接口'])
 
 
 if __name__ == '__main__':
-    uvicorn.run('run:Applications', host='0.0.0.0', port=8000, reload=True, debug=True, workers=1)
+    uvicorn.run('run:Applications', host='0.0.0.0', port=8001, reload=True, debug=True, workers=1)
