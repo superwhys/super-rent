@@ -6,6 +6,7 @@
 
 from loguru import logger
 from pymongo import MongoClient
+from config import HOST, PORT
 
 
 def get_client(host, port):
@@ -13,8 +14,7 @@ def get_client(host, port):
 
 
 def get_db():
-    client = get_client(host="127.0.0.1", port=27017)
-    # client = get_client(host="mongo", port=27017)
+    client = get_client(host=HOST, port=PORT)
     try:
         logger.info('get client')
         yield client['super_rent']

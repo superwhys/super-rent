@@ -9,6 +9,15 @@ from fastapi import HTTPException, status
 from passlib.context import CryptContext
 
 
+'''FastAPI'''
+RUN_PORT = '8000'
+
+
+'''databases'''
+HOST = 'mongo'
+PORT = 27017
+
+
 SECRET_KEY = "fe8a711ed3fcc1ba9e56d35369ebc589bc420d6bf474eed24b878b7a09e9ed96"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 ALGORITHM = "HS256"
