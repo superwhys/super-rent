@@ -14,7 +14,7 @@ RUN_PORT = 8000
 
 
 '''databases'''
-HOST = 'localhost'
+HOST = 'mongo'
 PORT = 27017
 
 
