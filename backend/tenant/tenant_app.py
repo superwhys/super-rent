@@ -13,6 +13,7 @@ from common.general_module import get_user_agent
 from common.schemas import Tenant, Token
 
 from fastapi import APIRouter, Depends
+from pymongo.database import Database
 
 
 tenant_app = APIRouter(
@@ -23,7 +24,7 @@ tenant_app = APIRouter(
 @tenant_app.post("/create_tenant",
                  summary="创建一个租客",
                  description=create_tenant_desc)
-async def create_tenant(db: Depends(get_db), tenant: Tenant, token: Depends(oauth2_schema)):
+async def create_tenant(tenant: Tenant, db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     """
     :param db:
     :param tenant:
