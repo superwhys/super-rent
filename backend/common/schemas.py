@@ -135,5 +135,5 @@ class BillInfo(BaseModel):
 
 
 class RentRoomLst(RentBase):
-    unit_rent_id: Optional[int]
+    unit_rent: Optional[str]
     rent_room_lst: Optional[List[RentRoom]] = None

@@ -13,7 +13,7 @@ from config import oauth2_schema
 from descriptions import get_unit_rent_desc, get_unit_rent_info_desc
 
 from common.database import get_db
-from common.curd import get_unit_rent_by_name, get_unit_rent_id, get_rent_room_by_rent_id
+from common.curd import get_unit_rent_by_name, get_unit_rent, get_rent_room_by_rent
 from common.schemas import UnitRentLst, UserAuthority, RentRoomLst, RequestStatus
 from common.general_module import get_user_agent, get_user_name_in_token
 
@@ -28,7 +28,7 @@ unit_rent_app = APIRouter(
 @unit_rent_app.get("/get_unit_rent",
                    summary='获取某账号名下所有出租单位',
                    description=get_unit_rent_desc)
-async def get_unit_rent(db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+async def get_all_unit_rent(db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     """
     Get the unit rent under the current account authority name
     if account is contractor, it just show the unit rent it has
@@ -65,11 +65,11 @@ async def get_unit_rent_info(rent_name: str, db: Database = Depends(get_db), tok
     """
     username, authority = get_user_name_in_token(token)
 
-    unit_rent_id = get_unit_rent_id(db, rent_name, username, authority)
-    if unit_rent_id:
-        rent_room_lst = get_rent_room_by_rent_id(db, int(unit_rent_id['rentId']))
+    unit_rent = get_unit_rent(db, rent_name, username, authority)
+    if unit_rent:
+        rent_room_lst = get_rent_room_by_rent(db, unit_rent['rent_name'])
         return RentRoomLst(**{'status': RequestStatus.success,
-                              'unit_rent_id': int(unit_rent_id['rentId']),
+                              'unit_rent': unit_rent['rent_name'],
                               'rent_room_lst': rent_room_lst})
     else:
         return RentRoomLst(**{'status': RequestStatus.error, 'msg': 'rent_name not exits'})

@@ -55,16 +55,6 @@ def get_unit_rent_by_name(db: Database, rent_owner: Optional[str] = None, rent_a
     return list(unit_rent_lst)
 
 
-def get_unit_rent(db: Database, rent_name: Optional[str] = None):
-    """
-    get user: rent_name is a Optional parameter, if None, it will find all
-    :param db:
-    :param rent_name:
-    :return: 
-    """
-    return db['unit_rent'].find({'rent_name': rent_name}, {"_id": 0})
-
-
 def get_unit_rent_room(db: Database, unit_rent_name: str):
     """
     get the room in the given unit rent
@@ -109,7 +99,7 @@ def create_tenant(db: Database, tenant: Tenant):
         return True
 
 
-def get_unit_rent_id(db: Database, rent_name: str, username: str, authority: str):
+def get_unit_rent(db: Database, rent_name: str, username: str, authority: str):
     """
     :param authority:
     :param username:
@@ -118,19 +108,19 @@ def get_unit_rent_id(db: Database, rent_name: str, username: str, authority: str
     :return:
     """
     if authority == UserAuthority.owner:
-        rent_id = db['unit_rent'].find_one({'rent_name': rent_name, 'rent_owner': username}, {'_id': 0, 'rentId': 1})
+        rent_id = db['unit_rent'].find_one({'rent_name': rent_name, 'rent_owner': username}, {'_id': 0})
     elif authority == UserAuthority.contractor:
-        rent_id = db['unit_rent'].find_one({'rent_name': rent_name, 'rent_admin': username}, {'_id': 0, 'rentId': 1})
+        rent_id = db['unit_rent'].find_one({'rent_name': rent_name, 'rent_admin': username}, {'_id': 0})
     else:
         rent_id = None
     return rent_id
 
 
-def get_rent_room_by_rent_id(db: Database, rent_id: int):
+def get_rent_room_by_rent(db: Database, rent_name: str):
     """
+    :param rent_name:
     :param db:
-    :param rent_id:
     :return:
     """
-    rent_room = db['rent_room'].find({'unit_rent_id': rent_id}, {'_id': 0})
+    rent_room = db['rent_room'].find({'unit_rent': rent_name}, {'_id': 0})
     return list(rent_room)
