@@ -1,6 +1,5 @@
 [
   {
-    "rentId": 1,
     "rent_name": "宏发嘉域",
     "rent_owner": "杨浩文",
     "rent_admin": "杨浩文",
@@ -11,7 +10,6 @@
     "rent_room_num": 1
   },
   {
-    "rentId": 2,
     "rent_name": "宏发天汇城",
     "rent_owner": "杨浩文",
     "rent_admin": "杨浩文",
@@ -22,7 +20,16 @@
     "rent_room_num": 1
   },
   {
-    "rentId": 3,
+    "rent_name": "深圳湾一号",
+    "rent_owner": "杨浩文",
+    "rent_admin": "杨浩文",
+    "isContract": false,
+    "rent_type": "公寓",
+    "rent_address": "深圳湾一号",
+    "start_time": "2020-04-20 22:30",
+    "rent_room_num": 1
+  },
+  {
     "rent_name": "出租屋1",
     "rent_owner": "杨浩文",
     "rent_admin": "杨浩文",
@@ -30,6 +37,6 @@
     "rent_type": "楼栋",
     "rent_address": "楼栋地址1楼栋地址1楼栋地址1楼栋地址1",
     "start_time": "2021-08-31 22:30",
-    "rent_room_num": 30
+    "rent_room_num": 27
   }
 ]

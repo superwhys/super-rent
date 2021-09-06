@@ -37,9 +37,7 @@ if __name__ == '__main__':
     rent_room_path = './rent_room.json'
     user_path = './user.json'
 
-    # path_lst = [bill_info_path, charges_path, tenant_path,
-    #             unit_rent_path, rent_room_path, user_path]
-
-    path_lst = [rent_room_path]
+    path_lst = [bill_info_path, charges_path, tenant_path,
+                unit_rent_path, rent_room_path, user_path]
 
     add_data_to_mongo(path_lst)

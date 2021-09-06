@@ -32,6 +32,12 @@ class RentType(str, Enum):
     building = "楼栋"
 
 
+class TenantStatus(str, Enum):
+    no_rent = '无'
+    in_rent = '租期内'
+    out_rent = '租期已过'
+
+
 class RentStatus(str, Enum):
     #  已出租，本月已缴费
     rent_and_paid = "已出租，本月已缴费"
@@ -52,6 +58,18 @@ class RegisterStatus(BaseModel):
     token: Optional[Token] = None
 
 
+##################################
+##################################
+##################################
+
+
+class Charge(BaseModel):
+    unit_rent: str
+    unit_water_money: int
+    unit_ele_money: int
+    unit_gas_money: int
+
+
 class User(BaseModel):
     user_name: str
     password: str
@@ -60,7 +78,6 @@ class User(BaseModel):
 
 
 class UnitRent(BaseModel):
-    rentId: int
     rent_name: str
     rent_owner: str
     rent_admin: str
@@ -78,25 +95,43 @@ class UnitRentLst(BaseModel):
 
 
 class RentRoom(BaseModel):
-    unit_rent_room_id: int
-    unit_rent_id: int
-    tenant_id: int
-    room: str
+    unit_rent: str
+    unit_rent_room: str
     room_type: str
     rent_time: datetime
-    rent_plan_time: int
     rent: int
     status: RentStatus
-    use_info_id: int
 
 
 class Tenant(BaseModel):
-    tenantId: int
     name: str
-    unit_rent_id: int
-    unit_rent_root_id: int
+    unit_rent: Optional[str] = None
+    unit_rent_root: Optional[str] = None
+    status: Optional[TenantStatus] = TenantStatus.no_rent
+    rent_plan_time: Optional[int] = 0
     phone: str
     id_card: str
+
+
+class BillInfo(BaseModel):
+    tenant: str
+    unit_rent: str
+    unit_rent_room: str
+    create_time: datetime
+    use_date: str
+    last_month_water: int
+    last_month_ele: int
+    last_month_gas: int
+    this_month_water: int
+    this_month_ele: int
+    this_month_gas: int
+    ele_used: int
+    water_used: int
+    gas_used: int
+    ele_money: int
+    water_money: int
+    gas_money: int
+    total: int
 
 
 class RentRoomLst(RentBase):
