@@ -10,15 +10,15 @@ from passlib.context import CryptContext
 
 
 '''FastAPI'''
-RUN_PORT = 8000
+RUN_PORT = 8001
 
 
 '''databases'''
-# HOST = '119.91.74.185'
-# PORT = 27018
+HOST = '119.91.74.185'
+PORT = 27018
 
-HOST = 'mongo'
-PORT = 27017
+# HOST = 'mongo'
+# PORT = 27017
 
 
 SECRET_KEY = "fe8a711ed3fcc1ba9e56d35369ebc589bc420d6bf474eed24b878b7a09e9ed96"

@@ -135,3 +135,14 @@ def get_rent_room_by_rent(db: Database, rent_name: str):
     """
     rent_room = db['rent_room'].find({'unit_rent': rent_name}, {'_id': 0})
     return list(rent_room)
+
+
+def get_tenant_info_by_name(db: Database, name: str, unit_rent: str, rent_room: str):
+    """
+    :param db:
+    :param name:
+    :param unit_rent:
+    :param rent_room:
+    :return:
+    """
+

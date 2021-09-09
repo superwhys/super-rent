@@ -77,6 +77,16 @@ class User(BaseModel):
     phone: str
 
 
+class Tenant(BaseModel):
+    name: str
+    unit_rent: Optional[str] = None
+    unit_rent_root: Optional[str] = None
+    status: Optional[TenantStatus] = TenantStatus.no_rent
+    rent_plan_time: Optional[int] = 0
+    phone: str
+    id_card: str
+
+
 class UnitRent(BaseModel):
     rent_name: str
     rent_owner: str
@@ -101,16 +111,7 @@ class RentRoom(BaseModel):
     rent_time: datetime
     rent: int
     status: RentStatus
-
-
-class Tenant(BaseModel):
-    name: str
-    unit_rent: Optional[str] = None
-    unit_rent_root: Optional[str] = None
-    status: Optional[TenantStatus] = TenantStatus.no_rent
-    rent_plan_time: Optional[int] = 0
-    phone: str
-    id_card: str
+    tenant: Optional[Tenant] = None
 
 
 class BillInfo(BaseModel):
