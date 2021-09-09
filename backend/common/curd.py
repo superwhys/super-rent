@@ -20,6 +20,17 @@ def get_user(db: Database, user_name: str):
     return user
 
 
+def get_tenant(db: Database, name: str, id_card: str):
+    """
+    :param db:
+    :param name:
+    :param id_card:
+    :return:
+    """
+    tenant = db['tenant'].find_one({'name': name, 'id_card': id_card}, {"_id": 0})
+    return tenant
+
+
 def create_user(db: Database, user: User):
     """
     create user
@@ -29,6 +40,38 @@ def create_user(db: Database, user: User):
     """
     try:
         db['user'].insert_one(user.dict())
+    except Exception as e:
+        logger.error(e)
+        return False
+    else:
+        return True
+
+
+def create_unit_rent(db: Database, unit_rent: UnitRent):
+    """
+    create unit rent and put into database
+    :param db:
+    :param unit_rent:
+    :return:
+    """
+    try:
+        db['unit_rent'].insert_one(unit_rent.dict())
+    except Exception as e:
+        logger.error(e)
+        return False
+    else:
+        return True
+
+
+def create_tenant(db: Database, tenant: Tenant):
+    """
+    create tenant and put into database
+    :param db:
+    :param tenant:
+    :return:
+    """
+    try:
+        db['tenant'].insert_one(tenant.dict())
     except Exception as e:
         logger.error(e)
         return False
@@ -65,38 +108,6 @@ def get_unit_rent_room(db: Database, unit_rent_name: str):
     unit_rent_id = db['unit_rent'].find({'rent_name': unit_rent_name}, {'rentId': 1, "_id": 0})
     rent_room_lst = db['rent_room'].find({'unit_rent_id': unit_rent_id}, {"_id": 0})
     return rent_room_lst
-
-
-def create_unit_rent(db: Database, unit_rent: UnitRent):
-    """
-    create unit rent and put into database
-    :param db:
-    :param unit_rent:
-    :return:
-    """
-    try:
-        db['unit_rent'].insert_one(unit_rent.dict())
-    except Exception as e:
-        logger.error(e)
-        return False
-    else:
-        return True
-
-
-def create_tenant(db: Database, tenant: Tenant):
-    """
-    create tenant and put into database
-    :param db:
-    :param tenant:
-    :return:
-    """
-    try:
-        db['tenant'].insert_one(tenant.dict())
-    except Exception as e:
-        logger.error(e)
-        return False
-    else:
-        return True
 
 
 def get_unit_rent(db: Database, rent_name: str, username: str, authority: str):

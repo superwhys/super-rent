@@ -103,11 +103,17 @@ def create_access_token(data: Optional[dict] = None,
 
 
 async def get_user_agent(request: Request):
+    """
+    get token from user agent, Authorization
+    judge the token in user agent
+    :param request:
+    :return:
+    """
     logger.info('in this')
     token = request.headers.get('Authorization')
     if not token:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_407_PROXY_AUTHENTICATION_REQUIRED,
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
