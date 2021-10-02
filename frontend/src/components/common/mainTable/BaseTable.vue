@@ -49,6 +49,14 @@ export default {
       this.multipleSelection = val;
       this.$emit('choseNum', this.multipleSelection.length)
     },
+  },
+  created() {
+    const windowHeight = window.innerHeight;
+    const tableHeight = windowHeight - 505;
+    const pageSize = Math.floor(tableHeight / 57)
+    this.$bus.$emit('pageSizeCount', pageSize)
+    this.$emit('pageSizeCount', pageSize)
+    // console.log(pageSize)
   }
 }
 </script>

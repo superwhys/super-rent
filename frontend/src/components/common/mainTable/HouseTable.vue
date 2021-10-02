@@ -41,8 +41,8 @@ export default {
       choseNum: 0,
       chosePeopleNum: 0,
       stripeBool: true,
-      pageSize: 7,
       pageCount: 5,
+      pageSize: 7,
       currentPage: 1,
       total: 0,
       hideSingle: true,
@@ -262,6 +262,7 @@ export default {
     }
   },
   mounted() {
+    // search
     this.$bus.$on('searchClick', (searchItem) => {
       console.log(searchItem)
       let filterNameData = []
@@ -288,33 +289,8 @@ export default {
         this.flagData = filterHouseNumData
       }
 
-      // if (searchItem.name === "" && searchItem.houseNum === "") {
-      //   this.currentChange(1)
-      //   this.total = this.tableDatas.length
-      //   this.flagData = this.tableDatas
-      // } else {
-      //   this.showDatas = []
-      //   this.flagData = []
-      //   if (searchItem.name === "") {
-      //     for (let item of this.tableDatas) {
-      //       if (String(item.homeNum) === searchItem.houseNum) {
-      //         this.flagData.push(item)
-      //       }
-      //     }
-      //   } else if (searchItem.houseNum === "") {
-      //     this.flagData = this.tableDatas.filter(data => data.personName.includes(searchItem.name))
-      //   } else {
-      //     for (let item of this.tableDatas) {
-      //       if (item.personName === searchItem.name && String(item.homeNum) === searchItem.houseNum) {
-      //         this.flagData.push(item)
-      //       }
-      //     }
-      //   }
-      // }
-
-
       this.total = this.flagData.length
-      this.showDatas = this.flagData.length > 7 ? this.flagData.slice(0, 7) : this.flagData
+      this.showDatas = this.flagData.length > this.pageSize ? this.flagData.slice(0, this.pageSize) : this.flagData
       this.currentPage = 1
     })
   },
@@ -330,10 +306,14 @@ export default {
       this.choseNum = item
     }
   },
-
   created() {
-    this.total = this.tableDatas.length
-    this.showDatas = this.tableDatas.slice(0, 7)
+    let that = this
+    that.$bus.$on('pageSizeCount', (page) => {
+      that.pageSize = page
+      this.total = this.tableDatas.length
+      this.showDatas = this.tableDatas.slice(0, this.pageSize)
+      console.log("page size: %d", that.pageSize)
+    })
   }
 }
 </script>

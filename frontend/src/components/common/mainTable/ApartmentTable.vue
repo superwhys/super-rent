@@ -321,8 +321,13 @@ export default {
   },
 
   created() {
-    this.total = this.tableDatas.length
-    this.showDatas = this.tableDatas.slice(0, 7)
+    let that = this
+    that.$bus.$on('pageSizeCount', (page) => {
+      that.pageSize = page
+      this.total = this.tableDatas.length
+      this.showDatas = this.tableDatas.slice(0, this.pageSize)
+      console.log("page size: %d", that.pageSize)
+    })
   }
 }
 </script>
