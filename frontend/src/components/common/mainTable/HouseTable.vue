@@ -274,21 +274,21 @@ export default {
       } else {
         filterNameData = this.tableDatas
       }
-      console.log(filterNameData);
+      // console.log(filterNameData);
       if (searchItem.houseNum !== "") {
         filterHouseNumData = filterNameData.filter(data =>
           data.homeNum === parseInt(searchItem.houseNum))
       } else {
         filterHouseNumData = filterNameData
       }
-      console.log(filterHouseNumData);
+      // console.log(filterHouseNumData);
       if (searchItem.choseStatus !== "请选择") {
         this.flagData = filterHouseNumData.filter(data =>
           data.status === searchItem.choseStatus)
       } else {
         this.flagData = filterHouseNumData
       }
-
+      console.log(this.pageSize)
       this.total = this.flagData.length
       this.showDatas = this.flagData.length > this.pageSize ? this.flagData.slice(0, this.pageSize) : this.flagData
       this.currentPage = 1
@@ -307,12 +307,11 @@ export default {
     }
   },
   created() {
-    let that = this
-    that.$bus.$on('pageSizeCount', (page) => {
-      that.pageSize = page
+    this.$bus.$on('pageSizeCount', (page) => {
+      this.pageSize = page
       this.total = this.tableDatas.length
       this.showDatas = this.tableDatas.slice(0, this.pageSize)
-      console.log("page size: %d", that.pageSize)
+      console.log("page size: %d", this.pageSize)
     })
   }
 }
