@@ -292,7 +292,7 @@ export default {
         }
       }
       this.total = this.flagData.length
-      this.showDatas = this.flagData.length > 7 ? this.flagData.slice(0, 7) : this.flagData
+      this.showDatas = this.flagData.length > this.pageSize ? this.flagData.slice(0, this.pageSize) : this.flagData
       this.currentPage = 1
     })
 
@@ -321,12 +321,11 @@ export default {
   },
 
   created() {
-    let that = this
-    that.$bus.$on('pageSizeCount', (page) => {
-      that.pageSize = page
+    this.$bus.$on('pageSizeCount', (page) => {
+      this.pageSize = page
       this.total = this.tableDatas.length
       this.showDatas = this.tableDatas.slice(0, this.pageSize)
-      console.log("page size: %d", that.pageSize)
+      console.log("page size: %d", this.pageSize)
     })
   }
 }
