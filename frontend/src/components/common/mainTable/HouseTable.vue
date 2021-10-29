@@ -309,10 +309,11 @@ export default {
   created() {
     this.$bus.$on('pageSizeCount', (page) => {
       this.pageSize = page
-      this.total = this.tableDatas.length
-      this.showDatas = this.tableDatas.slice(0, this.pageSize)
       console.log("page size: %d", this.pageSize)
     })
+    this.total = this.tableDatas.length
+    console.log(this.pageSize)
+    this.showDatas = this.tableDatas.slice(0, this.pageSize)
   }
 }
 </script>
