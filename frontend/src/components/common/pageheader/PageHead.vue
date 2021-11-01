@@ -9,7 +9,6 @@
           <el-breadcrumb-item>活动详情</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-
       <div class="user">
         <div class="icon">
           <a><i class="el-icon-search"></i></a>
@@ -37,13 +36,14 @@ export default {
   .head-top{
     width: 100%;
     height: 40px;
+    border-bottom: 1px solid #f6f4f4;
   }
 
   .breadcrumb{
     display: inline-block;
     float: left;
     width: 300px;
-    height: 40px;
+    height: 20px;
     margin-top: 15px;
   }
 
@@ -54,7 +54,7 @@ export default {
   }
 
   .head {
-    height: 40px;
+    height: 100%;
     border-bottom: 1px solid #F0F0F0
   }
 
@@ -80,18 +80,6 @@ export default {
   .head-down{
     width: 100%;
     height: 120px;
-    position: relative;
     /*background-color: black;*/
-  }
-
-  .user-icon {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    margin-left: 70px;
-    margin-top: -20px ;
-    /*float: left;*/
-    /*text-align: center;*/
-    vertical-align: center
   }
 </style>
