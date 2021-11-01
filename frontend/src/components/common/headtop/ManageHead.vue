@@ -9,24 +9,24 @@
         <span class="total-count">8</span>
       </div>
       <div class="total-box">
-        <span>出租单位总数</span>
-        <span class="house-count">8</span>
+        <span>楼栋数</span>
+        <span class="house-count">7</span>
       </div>
       <div class="total-box">
-        <span>出租单位总数</span>
-        <span class="apartment-count">8</span>
+        <span>公寓数</span>
+        <span class="apartment-count">6</span>
       </div>
       <div class="total-box">
-        <span>出租单位总数</span>
-        <span class="store-count">8</span>
+        <span>店铺数</span>
+        <span class="store-count">5</span>
       </div>
       <div class="total-box">
-        <span>出租单位总数</span>
-        <span class="other-count">8</span>
+        <span>其他类型数</span>
+        <span class="other-count">4</span>
       </div>
       <div class="total-box">
-        <span>出租单位总数</span>
-        <span class="total-price">8</span>
+        <span>当月收取金额总数</span>
+        <span class="total-price">3</span>
       </div>
 
     </div>
@@ -55,7 +55,7 @@ export default {
   .user-icon-box {
     width: 15%;
     height: 100%;
-    flex: 15%;
+    flex: 20%;
     line-height: 120px;
     padding-top: 24px;
     padding-left: 100px;
@@ -69,10 +69,10 @@ export default {
     padding-left: 30px;
   }
   .total-box{
-    width: 130px;
+    width: 100px;
     height: 60%;
     float: left;
-    padding: 0px 20px;
+    /*padding: 0px 0px;*/
   }
   .total-box span{
     text-align: center;
@@ -90,9 +90,11 @@ export default {
     font-weight: bold;
   }
   .total-box:first-child {
+    width: 130px;
     border-right: 1px solid #E9E9E9;
   }
   .total-box:last-child {
+    width: 160px;
     border-left: 1px solid #E9E9E9;
   }
 </style>
