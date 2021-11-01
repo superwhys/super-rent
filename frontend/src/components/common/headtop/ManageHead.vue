@@ -55,7 +55,7 @@ export default {
   .user-icon-box {
     width: 15%;
     height: 100%;
-    flex: 20%;
+    flex: 15%;
     line-height: 120px;
     padding-top: 24px;
     padding-left: 100px;
@@ -66,10 +66,10 @@ export default {
     height: 100%;
     flex: 80%;
     padding-top: 30px;
-    padding-left: 30px;
+    padding-left: 10px;
   }
   .total-box{
-    width: 100px;
+    width: 16%;
     height: 60%;
     float: left;
     /*padding: 0px 0px;*/
