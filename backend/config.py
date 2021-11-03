@@ -10,7 +10,7 @@ from passlib.context import CryptContext
 
 
 '''FastAPI'''
-RUN_PORT = 8001
+RUN_PORT = 8000
 
 
 '''databases'''
