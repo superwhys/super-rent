@@ -321,6 +321,7 @@ export default {
   },
 
   created() {
+    // auto adapt the height of the table
     this.$bus.$on('pageSizeCount', (page) => {
       this.pageSize = page
       this.total = this.tableDatas.length

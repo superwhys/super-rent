@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.9.7-slim
 COPY ./backend /app
 WORKDIR /app
 RUN pip3 install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
