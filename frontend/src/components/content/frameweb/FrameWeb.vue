@@ -8,7 +8,7 @@
       <!--   右边顶部   -->
       <el-header height="160px" class="header">
         <page-head>
-          <manage-head v-show="nowPath === '/Management'"></manage-head>
+          <manage-head v-show="nowPath === '/rent/management'"></manage-head>
         </page-head>
       </el-header>
       <!--   右边主体   -->
@@ -37,7 +37,7 @@ export default {
   },
   data() {
     return {
-      nowPath: '/Management'
+      nowPath: '/rent/management'
     }
   },
   watch: {

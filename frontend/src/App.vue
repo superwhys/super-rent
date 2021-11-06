@@ -1,22 +1,18 @@
 <template>
   <div id="app" class="App">
-    <frame-web>
-        <router-view></router-view>
-    </frame-web>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-  // import Login from "components/common/login/Login";
-  import FrameWeb from "components/content/frameweb/FrameWeb";
+  import Login from "components/common/login/Login";
 
   export default {
     name:'App',
     components: {
-      FrameWeb
+      Login
     }
   }
-
 
 </script>
 

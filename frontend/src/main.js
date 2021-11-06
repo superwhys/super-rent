@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
+import login from "components/common/login/Login";
+import Index from "views/Index"
 import router from './router'
 import store from './store'
 import {Container, Header, Aside, Main, Footer,
