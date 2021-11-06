@@ -24,28 +24,12 @@
     "status": "未出租"
   },
   {
-    "unit_rent_room": "1201",
-    "unit_rent": "深圳湾一号",
-    "room_type": "两房一厅",
-    "rent_time": "2020-03-26 22:30",
-    "rent": 100000,
-    "status": "未出租"
-  },
-  {
     "unit_rent_room": "101",
     "unit_rent": "出租屋1",
     "room_type": "一房一厅",
     "rent_time": "2020-03-26 22:30",
     "rent": 500,
     "status": "未出租"
-  },
-  {
-    "unit_rent_room": "101",
-    "unit_rent": "出租屋1",
-    "room_type": "一房一厅",
-    "rent_time": "2020-03-26 22:30",
-    "rent": 500,
-    "status": "已出租，本月已缴费"
   },
   {
     "unit_rent_room": "102",

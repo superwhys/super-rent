@@ -12,9 +12,7 @@ import re
 def add_data_to_mongo(paths: list):
     table_name_re = r"\.\/(.*?)\.json"
 
-    # client = pymongo.MongoClient('mongodb://127.0.0.1:27017')
-    client = pymongo.MongoClient('mongodb://superyong.top:27018')
-    # client = pymongo.MongoClient(host="mongo", port=27017)
+    client = pymongo.MongoClient('mongodb://127.0.0.1:27017')
     db = client['super_rent']
 
     for path in paths:
@@ -27,6 +25,8 @@ def add_data_to_mongo(paths: list):
                 table.insert_one(d)
 
     client.close()
+
+# TODO create index
 
 
 if __name__ == '__main__':
