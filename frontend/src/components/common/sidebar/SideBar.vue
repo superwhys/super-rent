@@ -14,7 +14,7 @@
           <i class="el-icon-odometer"></i>
           <span>服务中心</span>
         </template>
-        <el-menu-item index="management">
+        <el-menu-item index="/rent/management">
           <span slot="title">管理大厅</span>
         </el-menu-item>
       </el-submenu>

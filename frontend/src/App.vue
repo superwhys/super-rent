@@ -5,13 +5,9 @@
 </template>
 
 <script>
-  import Login from "components/common/login/Login";
 
   export default {
-    name:'App',
-    components: {
-      Login
-    }
+    name:'App'
   }
 
 </script>
