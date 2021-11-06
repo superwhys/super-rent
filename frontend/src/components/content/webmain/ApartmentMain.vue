@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import BaseMain from "components/content/basemain/BaseMain";
+import BaseMain from "components/content/basemain/BaseUnitRentMain";
 import MainHead from "components/common/mainhead/MainHead";
 import ApartmentTable from "components/common/mainTable/ApartmentTable";
 
