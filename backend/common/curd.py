@@ -120,7 +120,7 @@ def get_unit_rent(db: Database, rent_name: str, username: str, authority: str):
     """
     if authority == UserAuthority.owner:
         rent_id = db['unit_rent'].find_one({'rent_name': rent_name, 'rent_owner': username}, {'_id': 0})
-    elif authority == UserAuthority.contractor:
+    elif authority == UserAuthority.admin:
         rent_id = db['unit_rent'].find_one({'rent_name': rent_name, 'rent_admin': username}, {'_id': 0})
     else:
         rent_id = None

@@ -9,4 +9,5 @@ jose==1.0.0
 passlib==1.7.4
 python-multipart
 bcrypt
-uvicorn
+uvicorn~=0.15.0
+Faker~=9.8.0
