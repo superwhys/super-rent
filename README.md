@@ -19,3 +19,22 @@ it is the owner of the `unit-rent`,it can only operate the `unit-rent` under his
 
 it is the lowest level of authority, it can only operate the part of the tenant. And each `contractor` must be under a `owner`
 
+
+
+
+
+# Unsolved problems
+
+## backend
+
+1. the status in `rent_room` is different from that in `tenant`   ------->   process: fake data
+2. API design
+3. .....
+
+## frontend
+
+1. chart
+2. page head in module `house`, `apartment`, `store` and `other`
+3. page footer
+4. each edit pages
+5. .....
