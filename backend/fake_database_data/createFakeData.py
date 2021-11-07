@@ -15,8 +15,7 @@ class FakeData:
     def __init__(self):
         self.fake_count = 1000
         self.fake = Faker(locale='zh_CN')
-        self.mongo_con = MongoClient("superyong.top:27018")
-        # self.mongo_con = MongoClient("localhost:27017")
+        self.mongo_con = MongoClient("localhost:27017")
         self.mongo_db = self.mongo_con['super_rent']
 
         self.unit_rent = [self.fake.address().split(' ')[0] for i in range(100)]
