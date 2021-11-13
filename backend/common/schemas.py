@@ -71,10 +71,11 @@ class Charge(BaseModel):
 
 
 class User(BaseModel):
+    account_id: str
     user_name: str
     password: str
     authority: UserAuthority
-    phone: str
+    phone: Optional[str] = "00000000000"
 
 
 class Tenant(BaseModel):
@@ -98,7 +99,7 @@ class UnitRent(BaseModel):
     rent_room_num: int
 
 
-class UnitRentLst(BaseModel):
+class UnitRentLst(RentBase):
     rent_owner: Optional[str] = None
     rent_admin: Optional[str] = None
     unit_rent_lst: List[UnitRent]

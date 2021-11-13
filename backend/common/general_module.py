@@ -28,7 +28,7 @@ def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def get_user_name_in_token(token):
+def get_account_in_token(token):
     """
     :param token:
     :return:
@@ -36,25 +36,25 @@ def get_user_name_in_token(token):
     # get the username and authority in token
     try:
         token_decode = jwt.decode(token, key=SECRET_KEY, algorithms=[ALGORITHM])
-        username = token_decode.get("sub")
-        if username is None:
+        account_id = token_decode.get("sub")
+        if account_id is None:
             raise credentials_exception
         authority = token_decode.get('auth')
     except JWTError:
         raise credentials_exception
     else:
-        return username, authority
+        return account_id, authority
 
 
-def authenticate_user(username: str, password: str, db: Database):
+def authenticate_user(account_id: str, password: str, db: Database):
     """
     get the user from database and verify the password
     :param db:
-    :param username:
+    :param account_id:
     :param password:
     :return: user
     """
-    _user = get_user(db, username)
+    _user = get_user(db, account_id)
     logger.info(f'_user is : {_user}')
     user = User(**_user)
     if not user:

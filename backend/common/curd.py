@@ -9,14 +9,14 @@ from pymongo.database import Database
 from common.schemas import UnitRent, Tenant, User, UserAuthority
 
 
-def get_user(db: Database, user_name: str):
+def get_user(db: Database, account_id: str):
     """
     get user: it will find user_name in databases
     :param db:
-    :param user_name:
+    :param account_id:
     :return:
     """
-    user = db['user'].find_one({'user_name': user_name}, {"_id": 0})
+    user = db['user'].find_one({'account_id': account_id}, {"_id": 0})
     return user
 
 
@@ -110,21 +110,25 @@ def get_unit_rent_room(db: Database, unit_rent_name: str):
     return rent_room_lst
 
 
-def get_unit_rent(db: Database, rent_name: str, username: str, authority: str):
+def get_unit_rent(db: Database, rent_name: str, account_id: str, authority: str):
     """
     :param authority:
-    :param username:
+    :param account_id:
     :param db:
     :param rent_name:
     :return:
     """
-    if authority == UserAuthority.owner:
-        rent_id = db['unit_rent'].find_one({'rent_name': rent_name, 'rent_owner': username}, {'_id': 0})
-    elif authority == UserAuthority.admin:
-        rent_id = db['unit_rent'].find_one({'rent_name': rent_name, 'rent_admin': username}, {'_id': 0})
-    else:
-        rent_id = None
-    return rent_id
+    user = get_user(db, account_id)
+    if user is not None:
+        username = user.get('username')
+        if authority == UserAuthority.owner:
+            rent_id = db['unit_rent'].find_one({'rent_name': rent_name, 'rent_owner': username}, {'_id': 0})
+        elif authority == UserAuthority.admin:
+            rent_id = db['unit_rent'].find_one({'rent_name': rent_name, 'rent_admin': username}, {'_id': 0})
+        else:
+            rent_id = None
+        return rent_id
+    return None
 
 
 def get_rent_room_by_rent(db: Database, rent_name: str):

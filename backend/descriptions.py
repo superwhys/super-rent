@@ -12,8 +12,8 @@ get_unit_rent_info_desc = '参数：rent_name -> 出租单位名称, 需在heade
 
 
 """user description"""
-login_desc = 'POST请求, 参数：用户名和密码'
-register_desc = 'POST请求, 参数: 用户名, 密码, 权限, 手机号'
+login_desc = 'POST请求, 参数：用户名和密码, 传入密码格式:base64(timestamp-md5(pwd))'
+register_desc = 'POST请求, 参数: 用户名, 密码, 权限, 手机号, 传入密码格式:base64(timestamp-md5(pwd))'
 
 
 """tenant description"""
