@@ -7,8 +7,10 @@
 
 
 """unit_rent_app description"""
-get_unit_rent_desc = '参数：无, 需在headers中携带登录后的token, 字段为Authorization'
-get_unit_rent_info_desc = '参数：rent_name -> 出租单位名称, 需在headers中携带登录后的token, 字段为Authorization'
+get_all_unit_rental_desc = '参数：无, 需在headers中携带登录后的token, 字段为Authorization'
+get_unit_rental_desc = '参数：rental_name: 出租单位名字, 需在headers中携带登录后的token, 字段为Authorization'
+get_all_unit_rental_room_desc = '参数：rent_name -> 出租单位名称, 需在headers中携带登录后的token, 字段为Authorization'
+get_unit_rental_room_desc = '参数：rent_name -> 出租单位名称, room_id -> 出租单元id; 需在headers中携带登录后的token, 字段为Authorization'
 
 
 """user description"""
