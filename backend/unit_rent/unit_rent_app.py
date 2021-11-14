@@ -4,7 +4,6 @@
 # @Date  : 2021/9/19:55 ÏÂÎç
 # @Desc  : FastApi main
 
-
 from loguru import logger
 from pymongo.database import Database
 
@@ -39,7 +38,7 @@ async def get_all_unit_rental(db: Database = Depends(get_db), token: str = Depen
     account_id, authority = get_account_in_token(token)
     user = get_user(db, account_id)
     if user:
-        username = user.get('username')
+        username = user.get('user_name')
         # get different information according to different authority
         unit_rent = []
         if authority == UserAuthority.admin:
@@ -48,8 +47,8 @@ async def get_all_unit_rental(db: Database = Depends(get_db), token: str = Depen
             unit_rent = get_unit_rent_by_name(db, rent_owner=username)
         if authority == UserAuthority.contractor:
             unit_rent = get_unit_rent_by_name(db, rent_admin=username)
-        unit_rent_lst = {'rental_owner': username, 'unit_rental_lst': unit_rent}
-        logger.info(f'get_unit_rental_by_name: {username}, {unit_rent_lst}')
+        unit_rent_lst = {'rental_owner': username, 'unit_rental_lst': unit_rent, 'status': RequestStatus.success}
+        # logger.info(f'get_unit_rental_by_name: {username}, {unit_rent_lst}')
         return UnitRentLst(**unit_rent_lst)
     return UnitRentLst(**{'status': RequestStatus.error, 'msg': 'owner not exits'})
 
@@ -84,6 +83,7 @@ async def get_all_unit_rental_room(rental_name: str, db: Database = Depends(get_
     unit_rental = get_unit_rent(db, rental_name, account_id, authority)
     if unit_rental:
         rental_room_lst = get_rent_room_by_rent(db, unit_rental['rent_name'])
+        logger.debug(rental_room_lst)
         return RentRoomLst(**{'status': RequestStatus.success,
                               'unit_rental': unit_rental['rent_name'],
                               'rental_room_lst': rental_room_lst})

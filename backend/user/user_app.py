@@ -7,8 +7,9 @@
 
 
 from common.database import get_db
-from common.curd import get_user, create_user
-from common.schemas import Token, RegisterStatus, User
+from common.common_utils import get_encrypt_decode
+from common.curd import get_user, create_user, get_auth_code
+from common.schemas import TokenStatus, User, RegisterStatus, RequestStatus
 from common.general_module import create_access_token, authenticate_user
 
 from descriptions import login_desc, register_desc
@@ -24,21 +25,18 @@ from fastapi import APIRouter, Form, Depends, HTTPException, status
 user_app = APIRouter()
 
 
-@user_app.post("/user/login", response_model=Token,
+@user_app.post("/user/login", response_model=TokenStatus,
                summary='登录',
                description=login_desc)
-async def login(account_id: str = Form(...), password: str = Form(...), db: Database = Depends(get_db)):
+async def login(username: str = Form(...), password: str = Form(...), db: Database = Depends(get_db)):
     """
     :param db:
-    :param account_id:
+    :param username:
     :param password: base64(timestamp-md5(pwd))
     :return:
     """
-    password_decode = b64decode(password.encode('utf-8')).decode('utf-8')
-    pwd_b64decode_split = password_decode.split('-')
-
-    pwd_cipher = pwd_b64decode_split[1]
-    timestamp = int(pwd_b64decode_split[0] + pwd_b64decode_split[2])
+    account_id = username
+    timestamp, pwd_cipher = get_encrypt_decode(password)
     now_stamp = int(time())
 
     logger.info(f'{timestamp} - {pwd_cipher}')
@@ -64,34 +62,34 @@ async def login(account_id: str = Form(...), password: str = Form(...), db: Data
         data={'sub': user.account_id, 'auth': user.authority, 'create_time': now_time},
         expires_delta=access_token_expires
     )
-    return {'status': True, 'token': {'access_token': access_token,
-                                      'token_type': 'bearer'}}
+    return {'status': RequestStatus.success, 'access_token': access_token, 'token_type': 'bearer'}
 
 
 @user_app.post("/user", response_model=RegisterStatus,
                summary='注册',
                description=register_desc)
-async def register(user: User, db: Database = Depends(get_db)):
+async def register(user: User, auth_code: str, db: Database = Depends(get_db)):
     """
     :param user: password: base64(timestamp-md5(pwd))
+    :param auth_code: Authorization code
     :param db:
     :return:
     """
-    if get_user(db, user.account_id):
-        return {'status': False, 'msg': 'this username has been register'}
-
-    pwd_cipher = user.password.encode('utf-8')
-    pwd_b64decode = b64decode(pwd_cipher).decode('utf-8')
-    pwd_b64decode_split = pwd_b64decode.split('-')
-    pwd = pwd_b64decode_split[1]
-
-    timestamp = int(pwd_b64decode_split[0] + pwd_b64decode_split[2])
     now_stamp = int(time())
+
+    timestamp, _ = get_encrypt_decode(auth_code)
+    if timedelta(seconds=now_stamp-timestamp).days > 7 or not get_auth_code(db, auth_code):
+        return {'status': RequestStatus.error, 'msg': 'this Authorization code is not useful'}
+
+    if get_user(db, user.account_id):
+        return {'status': RequestStatus.error, 'msg': 'this username has been register'}
+
+    timestamp, pwd = get_encrypt_decode(user.password)
 
     logger.info(f'{timestamp} - {pwd}')
 
     if now_stamp - timestamp > 1800:
-        return {'status': False, 'msg': 'this visit has timeout!'}
+        return {'status': RequestStatus.error, 'msg': 'this visit has timeout!'}
 
     user.password = pwd_context.hash(pwd)
     if create_user(db, user):
@@ -101,7 +99,7 @@ async def register(user: User, db: Database = Depends(get_db)):
             data={'sub': user.account_id, 'auth': user.authority, 'create_time': now_time},
             expires_delta=access_token_expires
         )
-        return {'status': True, 'token': {'access_token': access_token,
-                                          'token_type': 'bearer'}}
+        return {'status': RequestStatus.success, 'token': {'access_token': access_token,
+                                                           'token_type': 'bearer'}}
     else:
-        return {'status': False, 'msg': 'Interface exception'}
+        return {'status': RequestStatus.error, 'msg': 'Interface exception'}

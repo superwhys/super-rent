@@ -24,7 +24,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 ALGORITHM = "HS256"
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_schema = OAuth2PasswordBearer(tokenUrl="/rent/user/login")
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="/rent/v1/user/login")
 
 credentials_exception = HTTPException(
         status.HTTP_401_UNAUTHORIZED,

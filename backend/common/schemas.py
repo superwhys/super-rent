@@ -17,7 +17,7 @@ class RequestStatus(str, Enum):
 
 class RentBase(BaseModel):
     status: RequestStatus
-    msg: Optional[str]
+    msg: Optional[str] = None
 
 
 class UserAuthority(str, Enum):
@@ -47,15 +47,20 @@ class RentStatus(str, Enum):
     no_rent = "Î´³ö×â"
 
 
-class Token(BaseModel):
+class BaseToken(BaseModel):
     access_token: str
     token_type: str
 
 
-class RegisterStatus(BaseModel):
-    status: bool
+class TokenStatus(BaseToken):
+    status: RequestStatus
     msg: Optional[str] = None
-    token: Optional[Token] = None
+
+
+class RegisterStatus(BaseModel):
+    status: RequestStatus
+    msg: Optional[str] = None
+    token: Optional[BaseToken] = None
 
 
 ##################################
@@ -100,9 +105,9 @@ class UnitRent(BaseModel):
 
 
 class UnitRentLst(RentBase):
-    rent_owner: Optional[str] = None
-    rent_admin: Optional[str] = None
-    unit_rent_lst: List[UnitRent]
+    rental_owner: Optional[str] = None
+    rental_admin: Optional[str] = None
+    unit_rental_lst: List[UnitRent]
 
 
 class RentRoom(BaseModel):
@@ -137,5 +142,5 @@ class BillInfo(BaseModel):
 
 
 class RentRoomLst(RentBase):
-    unit_rent: Optional[str]
-    rent_room_lst: Optional[List[RentRoom]] = None
+    unit_rental: Optional[str]
+    rental_room_lst: Optional[List[RentRoom]] = None

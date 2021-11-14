@@ -9,6 +9,19 @@ from pymongo.database import Database
 from common.schemas import UnitRent, Tenant, User, UserAuthority
 
 
+def get_auth_code(db: Database, auth_code):
+    """
+    Determine whether the authorization code is useful
+    :param auth_code:
+    :param db:
+    :return:
+    """
+    ac = db['auth_code'].find_one({'auth_code': auth_code})
+    if ac is None:
+        return False
+    return True
+
+
 def get_user(db: Database, account_id: str):
     """
     get user: it will find user_name in databases
@@ -114,19 +127,23 @@ def get_unit_rent(db: Database, rent_name: str, account_id: str, authority: str)
     """
     :param authority:
     :param account_id:
-    :param db:
     :param rent_name:
+    :param db:
     :return:
     """
     user = get_user(db, account_id)
     if user is not None:
-        username = user.get('username')
+
+        username = user.get('user_name')
         if authority == UserAuthority.owner:
             rent_id = db['unit_rent'].find_one({'rent_name': rent_name, 'rent_owner': username}, {'_id': 0})
-        elif authority == UserAuthority.admin:
+        elif authority == UserAuthority.contractor:
             rent_id = db['unit_rent'].find_one({'rent_name': rent_name, 'rent_admin': username}, {'_id': 0})
+        elif authority == UserAuthority.admin:
+            rent_id = db['unit_rent'].find_one({'rent_name': rent_name}, {'_id': 0})
         else:
             rent_id = None
+        logger.debug(rent_id)
         return rent_id
     return None
 

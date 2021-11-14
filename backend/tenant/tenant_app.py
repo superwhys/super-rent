@@ -9,7 +9,7 @@ from config import oauth2_schema
 from descriptions import create_tenant_desc, get_tenant_info_desc
 
 from common.database import get_db
-from common.schemas import Tenant, Token
+from common.schemas import Tenant, TokenStatus
 from common.general_module import get_user_agent, get_account_in_token
 from common.curd import get_tenant, create_tenant
 

@@ -109,7 +109,6 @@ async def get_user_agent(request: Request):
     :param request:
     :return:
     """
-    logger.info('in this')
     token = request.headers.get('Authorization')
     if not token:
         raise HTTPException(
