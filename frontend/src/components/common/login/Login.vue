@@ -1,37 +1,39 @@
 <template>
-  <div id="login">
-    <div class="left">
-      <div class="title"><span>房屋租金管理平台</span></div>
-      <div class="short-text">
-        <span>一个简单易用的管理平台</span>
-        <br>
-        <span>——Design by SuperYong</span>
+  <div class="login">
+    <div class="loginBox">
+      <div class="left">
+        <div class="title"><span>房屋租金管理平台</span></div>
+        <div class="short-text">
+          <span>一个简单易用的管理平台</span>
+          <br>
+          <span>——Design by SuperYong</span>
+        </div>
+        <div>
+          <img src="~assets/img/login/computer.png" alt="" class="computer">
+        </div>
       </div>
-      <div>
-        <img src="~assets/img/login/computer.png" alt="" class="computer">
+      <!-- TODO:表单提交 -->
+      <div class="right">
+        <div class="welcome"><span>欢迎登录</span></div>
+        <el-input
+            placeholder="请输入账号"
+            prefix-icon="el-icon-user"
+            v-model="username"
+            class="username">
+        </el-input>
+        <el-input
+            type="password"
+            placeholder="请输入密码"
+            prefix-icon="el-icon-lock"
+            class="password"
+            v-model="password">
+        </el-input>
+        <div class="status">
+          <el-checkbox v-model="checked" class="remenber-password"><span style="font-size: 12px">记住密码</span></el-checkbox>
+          <div class="forget"><a href="#">忘记密码</a></div>
+        </div>
+        <el-button type="primary" class="loginBtn" @click="login">登录</el-button>
       </div>
-    </div>
-    <!-- TODO:表单提交 -->
-    <div class="right">
-      <div class="welcome"><span>欢迎登录</span></div>
-      <el-input
-        placeholder="请输入账号"
-        prefix-icon="el-icon-user"
-        v-model="username"
-        class="username">
-      </el-input>
-      <el-input
-        type="password"
-        placeholder="请输入密码"
-        prefix-icon="el-icon-lock"
-        class="password"
-        v-model="password">
-      </el-input>
-      <div class="status">
-        <el-checkbox v-model="checked" class="remenber-password"><span style="font-size: 12px">记住密码</span></el-checkbox>
-        <div class="forget"><a href="#">忘记密码</a></div>
-      </div>
-      <el-button type="primary" class="loginBtn" @click="login">登录</el-button>
     </div>
   </div>
 </template>
@@ -60,10 +62,21 @@ export default {
 </script>
 
 <style scoped>
-  #login {
-    width: 765px;
-    height: 360px;
-    margin: 100px auto;
+  .login {
+    width: 100%;
+    height: 100%;
+    background-image: url("~assets/img/login/background.png");
+  }
+
+  .loginBox {
+    width: 720px;
+    height: 390px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 
   .left {
@@ -81,8 +94,7 @@ export default {
   }
   .short-text {
     font-size: 12px;
-    margin: 0 auto;
-    margin-left: 50px;
+    margin: 0 auto 0 50px;
   }
   .short-text span {
     display: inline-block;

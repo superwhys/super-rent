@@ -7,7 +7,14 @@
 <script>
 
   export default {
-    name:'App'
+    name:'App',
+    mounted() {
+      const h = document.documentElement.clientHeight;
+      console.log(h)
+      const ss = document.getElementById('app');
+      console.log(ss)
+      ss.style.height = h + "px";
+    }
   }
 
 </script>
@@ -16,6 +23,5 @@
   @import 'assets/css/base.css';
   .App{
     width: 100%;
-    height: 100%
   }
 </style>
