@@ -7,7 +7,7 @@ backend/user/__pycache__/
 backend/tenant/__pycache__/
 backend/common/__pycache__/
 backend/unit_rent/__pycache__/
-/__pycache__
+**/__pycache__
 __pycache__/
 # local env files
 .env.local
