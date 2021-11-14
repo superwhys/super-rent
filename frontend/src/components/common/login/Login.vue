@@ -28,8 +28,15 @@
             class="password"
             v-model="password">
         </el-input>
+        <el-input
+            placeholder="授权码"
+            prefix-icon="el-icon-key"
+            v-model="authCode"
+            class="authCode">
+        </el-input>
         <div class="status">
-          <el-checkbox v-model="checked" class="remenber-password"><span style="font-size: 12px">记住密码</span></el-checkbox>
+          <el-checkbox v-model="checked" class="remenber-password"><span style="font-size: 12px">记住密码</span>
+          </el-checkbox>
           <div class="forget"><a href="#">忘记密码</a></div>
         </div>
         <el-button type="primary" class="loginBtn" @click="login">登录</el-button>
@@ -42,13 +49,12 @@
 
 export default {
   name: "Login",
-  components: {
-
-  },
+  components: {},
   data() {
     return {
       username: '',
       password: '',
+      authCode: '',
       checked: false,
     }
   },
@@ -56,106 +62,122 @@ export default {
     login() {
       console.log(this.username);
       console.log(this.password);
+      console.log(this.authCode);
     }
   }
 }
 </script>
 
 <style scoped>
-  .login {
-    width: 100%;
-    height: 100%;
-    background-image: url("~assets/img/login/background.png");
-  }
+.login {
+  width: 100%;
+  height: 100%;
+  background-image: url("~assets/img/login/background.png");
+}
 
-  .loginBox {
-    width: 720px;
-    height: 390px;
-    margin: auto;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
+.loginBox {
+  width: 720px;
+  height: 390px;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
 
-  .left {
-    background-color: rgba(58, 98, 215, 100);
-    width: 45%;
-    height: 100%;
-    opacity: 0.9;
-    color: #fff;
-  }
-  .title{
-    font-size: 25px;
-    text-align: center;
-    margin-top: 70px;
-    padding-bottom: 10px;
-  }
-  .short-text {
-    font-size: 12px;
-    margin: 0 auto 0 50px;
-  }
-  .short-text span {
-    display: inline-block;
-    margin-top: 10px;
-  }
-  .computer {
-    display: block;
-    width: 270px;
-    height: 200px;
-    margin: 0 auto;
-  }
+.left {
+  background-color: rgba(58, 98, 215, 100);
+  width: 45%;
+  height: 100%;
+  opacity: 0.9;
+  color: #fff;
+}
 
+.title {
+  font-size: 25px;
+  text-align: center;
+  margin-top: 70px;
+  padding-bottom: 10px;
+}
 
-  .right {
-    width: 55%;
-    height: 100%;
-    background-color: #fff;
-    display: flex;
-    /* 从上往下排列*/
-    flex-direction: column;
-    /* 水平居中*/
-    align-items: center;
-  }
-  .welcome {
-    margin-top: 70px;
-    margin-bottom: 35px;
-  }
-  .welcome span {
-    font-size: 20px;
-    border-bottom: 2px solid #3A62D7;
-    font-weight: bold;
-  }
-  .username {
-    width: 265px;
-  }
-  .username input {
-    border: none
-  }
-  .password {
-    width: 265px;
-  }
-  .username ,.password {
-    margin-bottom: 5px;
-  }
-  .remenber-password {
-    align-content: flex-start;
-    margin-right: 140px;
-  }
-  .forget {
-    display: inline;
-    font-size: 12px;
-  }
-  .forget a:hover {
-    color: #409EFF;
-  }
-  .loginBtn {
-    width: 265px;
-    margin-top: 10px;
-  }
+.short-text {
+  font-size: 12px;
+  margin: 0 auto 0 50px;
+}
+
+.short-text span {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.computer {
+  display: block;
+  width: 270px;
+  height: 200px;
+  margin: 0 auto;
+}
 
 
+.right {
+  width: 55%;
+  height: 100%;
+  background-color: #fff;
+  display: flex;
+  /* 从上往下排列*/
+  flex-direction: column;
+  /* 水平居中*/
+  align-items: center;
+}
 
+.welcome {
+  margin-top: 60px;
+  margin-bottom: 25px;
+}
 
+.welcome span {
+  font-size: 20px;
+  border-bottom: 2px solid #3A62D7;
+  font-weight: bold;
+}
+
+.username {
+  width: 265px;
+}
+
+.username input {
+  border: none
+}
+
+.password {
+  width: 265px;
+}
+
+.authCode {
+  width: 265px;
+}
+
+.username, .password {
+  margin-bottom: 5px;
+}
+
+.remenber-password {
+  align-content: flex-start;
+  margin-right: 140px;
+  padding-top: 20px;
+}
+
+.forget {
+  display: inline;
+  font-size: 12px;
+}
+
+.forget a:hover {
+  color: #409EFF;
+}
+
+.loginBtn {
+  width: 265px;
+  margin-top: 10px;
+}
 </style>
