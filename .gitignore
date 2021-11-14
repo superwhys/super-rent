@@ -2,6 +2,7 @@
 node_modules
 /dist
 backend/__pycache__/
+backend/baseApi/__pycache__/
 backend/user/__pycache__/
 backend/tenant/__pycache__/
 backend/common/__pycache__/
