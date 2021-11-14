@@ -8,19 +8,25 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from config import RUN_PORT
 from user.user_app import user_app
+from config import RUN_PORT, DOCS_DEBUG
 from tenant.tenant_app import tenant_app
 from baseApi.base_api import base_api_router
 from unit_rent.unit_rent_app import unit_rent_app
+
+from loguru import logger
+from sys import stderr
+
+
+logger.remove()
+logger.add(stderr, level="DEBUG")
 
 
 Applications = FastAPI(
     title='Super Rent API Docs',
     description='Super Rent 租金管理平台API接口文档',
     version='0.0.1',
-    docs_url='/docs',
-    redoc_url='/redocs',
+    docs_url='/docs' if DOCS_DEBUG else None,
 )
 
 Applications.add_middleware(

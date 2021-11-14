@@ -7,8 +7,13 @@
 import requests
 
 headers = {
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJcdTY3NjhcdTZkNjlcdTY1ODciLCJhdXRoIjoib3duZXIiLCJjcmVhdGVfdGltZSI6IjIwMjEtMDktMDQgMjA6MTE6MTciLCJleHAiOjE2MzA3NTkyNzd9.jl-uX6EsW55Yp1bNoA_AEDx7dpQ_bffctfGdcRsKzUA'
+    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0b3duZXIiLCJhdXRoIjoib3duZXIiLCJjcmVhdGVfdGltZSI6IjIwMjEtMTEtMTQgMjA6MjI6MDkiLCJleHAiOjE2MzY4OTQzMjl9.25I3ThBOuDlsMmSZCjkF7MRxR1_cFfH5zuhZRU2i-_s',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36',
 }
 
-res = requests.get('http://localhost:8000/rent/get_unit_rent', headers=headers)
-print(res.text)
+params = (
+    ('account_id', 'testowner'),
+)
+
+response = requests.get('http://localhost:8000/rent/v1/user', headers=headers, params=params)
+print(response.text)

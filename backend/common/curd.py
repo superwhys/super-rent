@@ -5,7 +5,9 @@
 # @Desc  :
 from loguru import logger
 from typing import Optional
+from collections import Counter
 from pymongo.database import Database
+from fastapi import HTTPException, status
 from common.schemas import UnitRent, Tenant, User, UserAuthority
 
 
@@ -94,7 +96,7 @@ def create_tenant(db: Database, tenant: Tenant):
 
 def get_unit_rent_by_name(db: Database, rent_owner: Optional[str] = None, rent_admin: Optional[str] = None):
     """
-    get unit_rent by name
+    get all the unit rental under the user
     :param db:
     :param rent_owner:
     :param rent_admin:
@@ -125,6 +127,7 @@ def get_unit_rent_room(db: Database, unit_rent_name: str):
 
 def get_unit_rent(db: Database, rent_name: str, account_id: str, authority: str):
     """
+    get the specify unit rental information
     :param authority:
     :param account_id:
     :param rent_name:
@@ -166,4 +169,84 @@ def get_tenant_info_by_name(db: Database, name: str, unit_rent: str, rent_room: 
     :param rent_room:
     :return:
     """
+    pass
 
+
+def get_user_rent_info_data(db: Database, account_id: str, authority: UserAuthority) -> dict:
+    """
+    get the user rental info in database
+    include each rent_type num,
+    and the price of all unit rental
+    :param authority:
+    :param account_id:
+    :param db:
+    :return: a dict
+    """
+    try:
+        if authority == UserAuthority.admin:
+            unit_rent_lst = get_unit_rent_by_name(db)
+            # rent type number
+            rent_type_num = db['unit_rent'].aggregate([{'$group': {'_id': '$rent_type', 'rent_num': {'$sum': 1}}},
+                                                       {'$project': {'_id': 0, 'rent_type_name': '$_id',
+                                                                     'rent_num': 1}}])
+            rent_type_num = list(rent_type_num)
+            # each unit rental price
+            unit_rental_price = db['bill_info'].aggregate([{'$group': {'_id': '$unit_rent',
+                                                                       'total_price': {'$sum': '$total'}}},
+                                                           {'$project': {'_id': 0, 'unit_rent': '$_id',
+                                                                         'total_price': 1}}])
+            unit_rental_price_fin = {price_dic['unit_rent']: price_dic['total_price'] for price_dic in
+                                     unit_rental_price}
+            # total rental price
+            total_price = db['bill_info'].aggregate([{'$group': {'_id': "null", 'total_price': {'$sum': '$total'}}},
+                                                     {'$project': {'_id': 0}}])
+            total_price = list(total_price)[0]
+        else:
+            # get the info in specify user
+            user = get_user(db, account_id)
+            if authority == UserAuthority.owner:
+                unit_rent_lst = get_unit_rent_by_name(db, rent_owner=user.get('user_name'))
+            else:
+                unit_rent_lst = get_unit_rent_by_name(db, rent_admin=user.get('user_name'))
+
+            rent_type_lst = [unit_rental['rent_type'] for unit_rental in unit_rent_lst]
+            rent_name_lst = [unit_rental['rent_name'] for unit_rental in unit_rent_lst]
+            rent_type_counter = Counter(rent_type_lst)
+            # rent type number
+            rent_type_num = [{'rent_type_name': count_key, 'rent_num': rent_type_counter[count_key]}
+                             for count_key in rent_type_counter]
+            # each unit rental price
+            unit_rental_price = db['bill_info'].aggregate([{'$match': {'unit_rent': {'$in': rent_name_lst}}},
+                                                           {'$group': {'_id': '$unit_rent',
+                                                                       'total_price': {'$sum': '$total'}}},
+                                                           {'$project': {'_id': 0, 'unit_rent': '$_id',
+                                                                         'total_price': 1}}])
+            unit_rental_price_fin = {price_dic['unit_rent']: price_dic['total_price'] for price_dic in
+                                     unit_rental_price}
+            # total rental price
+            total_price = db['bill_info'].aggregate([{'$match': {'unit_rent': {'$in': rent_name_lst}}},
+                                                     {'$group': {'_id': "null", 'total_price': {'$sum': '$total'}}},
+                                                     {'$project': {'_id': 0}}])
+            total_price = list(total_price)[0]
+
+        unit_rental_lst = []
+        for unit_rent in unit_rent_lst:
+            unit_rental = {'rent_name': unit_rent['rent_name'],
+                           'rent_address': unit_rent['rent_address'],
+                           'rent_owner': unit_rent['rent_owner'],
+                           'rent_type': unit_rent['rent_type'],
+                           'start_time': unit_rent['start_time'],
+                           'rent_room_num': unit_rent['rent_room_num'],
+                           'this_month_price': unit_rental_price_fin.get(unit_rent['rent_name'])}
+            unit_rental_lst.append(unit_rental)
+        logger.debug(unit_rental_lst)
+        return {'totalPrice': total_price['total_price'],
+                'rent_type_num': rent_type_num,
+                'each_rental_info': unit_rental_lst}
+    except Exception as e:
+        logger.debug(e)
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="get user info function error",
+            headers={"WWW-Authenticate": "Bearer"},
+        )

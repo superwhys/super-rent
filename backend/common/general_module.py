@@ -40,7 +40,8 @@ def get_account_in_token(token):
         if account_id is None:
             raise credentials_exception
         authority = token_decode.get('auth')
-    except JWTError:
+    except JWTError as e:
+        logger.error(e)
         raise credentials_exception
     else:
         return account_id, authority
@@ -56,9 +57,11 @@ def authenticate_user(account_id: str, password: str, db: Database):
     """
     _user = get_user(db, account_id)
     logger.info(f'_user is : {_user}')
-    user = User(**_user)
-    if not user:
+
+    if _user is None:
         return False
+
+    user = User(**_user)
     if not verify_password(password, user.password):
         return False
     return user

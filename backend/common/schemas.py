@@ -15,11 +15,6 @@ class RequestStatus(str, Enum):
     error = "error"
 
 
-class RentBase(BaseModel):
-    status: RequestStatus
-    msg: Optional[str] = None
-
-
 class UserAuthority(str, Enum):
     admin = "admin"
     owner = "owner"
@@ -47,19 +42,17 @@ class RentStatus(str, Enum):
     no_rent = "Î´³ö×â"
 
 
+class StatusBase(BaseModel):
+    status: RequestStatus
+    msg: Optional[str] = None
+
+
 class BaseToken(BaseModel):
     access_token: str
     token_type: str
 
 
-class TokenStatus(BaseToken):
-    status: RequestStatus
-    msg: Optional[str] = None
-
-
-class RegisterStatus(BaseModel):
-    status: RequestStatus
-    msg: Optional[str] = None
+class RegisterStatus(StatusBase):
     token: Optional[BaseToken] = None
 
 
@@ -83,6 +76,29 @@ class User(BaseModel):
     phone: Optional[str] = "00000000000"
 
 
+class HomeUnitRentInfo(BaseModel):
+    rent_name: str
+    rent_address: str
+    rent_owner: str
+    rent_type: RentType
+    start_time: datetime
+    rent_room_num: int
+    this_month_price: int
+
+
+class RentTypeNum(BaseModel):
+    rent_type_name: str
+    rent_num: int
+
+
+class UserRentInfo(StatusBase):
+    account_id: str
+    username: str
+    totalPrice: int
+    each_rental_info: List[HomeUnitRentInfo]
+    rent_type_num: List[RentTypeNum]
+
+
 class Tenant(BaseModel):
     name: str
     unit_rent: Optional[str] = None
@@ -104,7 +120,7 @@ class UnitRent(BaseModel):
     rent_room_num: int
 
 
-class UnitRentLst(RentBase):
+class UnitRentLst(StatusBase):
     rental_owner: Optional[str] = None
     rental_admin: Optional[str] = None
     unit_rental_lst: List[UnitRent]
@@ -141,6 +157,6 @@ class BillInfo(BaseModel):
     total: int
 
 
-class RentRoomLst(RentBase):
+class RentRoomLst(StatusBase):
     unit_rental: Optional[str]
     rental_room_lst: Optional[List[RentRoom]] = None
