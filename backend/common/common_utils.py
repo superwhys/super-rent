@@ -7,6 +7,8 @@
 from base64 import b64decode
 from fastapi import HTTPException, status
 
+from common.schemas import RequestStatus
+
 
 def get_encrypt_decode(encrypt_code: str):
     """
@@ -24,7 +26,7 @@ def get_encrypt_decode(encrypt_code: str):
     except Exception:
         raise HTTPException(
             status.HTTP_400_BAD_REQUEST,
-            detail="input code error!",
+            detail={'status': RequestStatus.error, 'msg': "input code error!"},
             headers={"WWW-Authenticate": "Bearer"},
         )
 

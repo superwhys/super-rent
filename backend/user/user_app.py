@@ -41,8 +41,8 @@ async def login(username: str = Form(...), password: str = Form(...), db: Databa
 
     if now_stamp - timestamp > 1800:
         raise HTTPException(
-            status.HTTP_401_UNAUTHORIZED,
-            detail="this visit has timeout!",
+            status.HTTP_408_REQUEST_TIMEOUT,
+            detail={'status': RequestStatus.error, 'msg': "this visit has timeout!"},
             headers={"WWW-Authenticate": "Bearer"},
         )
 
@@ -50,7 +50,7 @@ async def login(username: str = Form(...), password: str = Form(...), db: Databa
     if not user:
         raise HTTPException(
             status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect account_id or password",
+            detail={'status': RequestStatus.error, 'msg': "Incorrect account_id or password"},
             headers={"WWW-Authenticate": "Bearer"},
         )
     # token expire time
@@ -88,8 +88,8 @@ async def register(user: User, auth_code: str, db: Database = Depends(get_db)):
 
     if now_stamp - timestamp > 1800:
         raise HTTPException(
-            status.HTTP_401_UNAUTHORIZED,
-            detail="this visit has timeout!",
+            status.HTTP_408_REQUEST_TIMEOUT,
+            detail={'status': RequestStatus.error, 'msg': "this visit has timeout!"},
             headers={"WWW-Authenticate": "Bearer"},
         )
 
@@ -125,7 +125,7 @@ async def get_user_info(account_id: str, db: Database = Depends(get_db), token: 
     if token_account != account_id:
         raise HTTPException(
             status.HTTP_401_UNAUTHORIZED,
-            detail="account not allow",
+            detail={'status': RequestStatus.error, 'msg': "account not allow"},
             headers={"WWW-Authenticate": "Bearer"},
         )
 

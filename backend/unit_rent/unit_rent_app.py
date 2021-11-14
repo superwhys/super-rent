@@ -11,11 +11,11 @@ from config import oauth2_schema
 from descriptions import get_all_unit_rental_desc, get_unit_rental_desc, get_all_unit_rental_room_desc, get_unit_rental_room_desc
 
 from common.database import get_db
-from common.curd import get_unit_rent_by_name, get_unit_rent, get_rent_room_by_rent, get_user
-from common.schemas import UnitRentLst, UserAuthority, RentRoomLst, RequestStatus
+from common.curd import get_unit_rent_by_name, get_unit_rent, get_rent_room_by_rent, get_user, get_specify_rent_room
+from common.schemas import UnitRentLst, UserAuthority, RentRoomLst, RequestStatus, RentRoom
 from common.general_module import get_user_agent, get_account_in_token
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 
 unit_rent_app = APIRouter(
     dependencies=[Depends(get_user_agent)]
@@ -93,9 +93,11 @@ async def get_all_unit_rental_room(rental_name: str, db: Database = Depends(get_
 
 @unit_rent_app.get("/unit_rental_room/{rental_name}/query/{room_id}",
                    summary='获取当前账号名下某出租单位下指定出租单元',
-                   deprecated=True,
+                   response_model=RentRoom,
                    description=get_unit_rental_room_desc)
-async def get_unit_rental_room(rental_name: str, room_id: str, db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+async def get_unit_rental_room(rental_name: str, room_id: int,
+                               db: Database = Depends(get_db),
+                               token: str = Depends(oauth2_schema)):
     """
     :param rental_name:
     :param room_id:
@@ -103,4 +105,30 @@ async def get_unit_rental_room(rental_name: str, room_id: str, db: Database = De
     :param db:
     :return:
     """
-    pass
+    token_account, authority = get_account_in_token(token)
+    user = get_user(db, token_account)
+
+    if authority == UserAuthority.admin:
+        unit_rent_lst = get_unit_rent_by_name(db)
+    elif authority == UserAuthority.owner:
+        unit_rent_lst = get_unit_rent_by_name(db, rent_owner=user['user_name'])
+    else:
+        unit_rent_lst = get_unit_rent_by_name(db, rent_admin=user['user_name'])
+
+    unit_rent_name_lst = set([unit_rent['rent_name'] for unit_rent in unit_rent_lst])
+
+    if rental_name not in unit_rent_name_lst:
+        raise HTTPException(
+            status.HTTP_404_NOT_FOUND,
+            detail={'status': RequestStatus.error, 'msg': "this account don't has this unit rent"},
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    rent_room = get_specify_rent_room(db, rental_name, room_id)
+    if rent_room is None:
+        raise HTTPException(
+            status.HTTP_404_NOT_FOUND,
+            detail={'status': RequestStatus.error, 'msg': "this account don't has this unit rent"},
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return RentRoom(**rent_room)

@@ -11,7 +11,7 @@ from fastapi import HTTPException, status
 from common.schemas import UnitRent, Tenant, User, UserAuthority
 
 
-def get_auth_code(db: Database, auth_code):
+def get_auth_code(db: Database, auth_code) -> bool:
     """
     Determine whether the authorization code is useful
     :param auth_code:
@@ -24,7 +24,7 @@ def get_auth_code(db: Database, auth_code):
     return True
 
 
-def get_user(db: Database, account_id: str):
+def get_user(db: Database, account_id: str) -> dict:
     """
     get user: it will find user_name in databases
     :param db:
@@ -35,7 +35,7 @@ def get_user(db: Database, account_id: str):
     return user
 
 
-def get_tenant(db: Database, name: str, id_card: str):
+def get_tenant(db: Database, name: str, id_card: str) -> dict:
     """
     :param db:
     :param name:
@@ -46,7 +46,7 @@ def get_tenant(db: Database, name: str, id_card: str):
     return tenant
 
 
-def create_user(db: Database, user: User):
+def create_user(db: Database, user: User) -> bool:
     """
     create user
     :param db:
@@ -62,7 +62,7 @@ def create_user(db: Database, user: User):
         return True
 
 
-def create_unit_rent(db: Database, unit_rent: UnitRent):
+def create_unit_rent(db: Database, unit_rent: UnitRent) -> bool:
     """
     create unit rent and put into database
     :param db:
@@ -78,7 +78,7 @@ def create_unit_rent(db: Database, unit_rent: UnitRent):
         return True
 
 
-def create_tenant(db: Database, tenant: Tenant):
+def create_tenant(db: Database, tenant: Tenant) -> bool:
     """
     create tenant and put into database
     :param db:
@@ -94,7 +94,7 @@ def create_tenant(db: Database, tenant: Tenant):
         return True
 
 
-def get_unit_rent_by_name(db: Database, rent_owner: Optional[str] = None, rent_admin: Optional[str] = None):
+def get_unit_rent_by_name(db: Database, rent_owner: Optional[str] = None, rent_admin: Optional[str] = None) -> list:
     """
     get all the unit rental under the user
     :param db:
@@ -113,7 +113,7 @@ def get_unit_rent_by_name(db: Database, rent_owner: Optional[str] = None, rent_a
     return list(unit_rent_lst)
 
 
-def get_unit_rent_room(db: Database, unit_rent_name: str):
+def get_unit_rent_room(db: Database, unit_rent_name: str) -> list:
     """
     get the room in the given unit rent
     :param db:
@@ -125,7 +125,13 @@ def get_unit_rent_room(db: Database, unit_rent_name: str):
     return rent_room_lst
 
 
-def get_unit_rent(db: Database, rent_name: str, account_id: str, authority: str):
+def get_specify_rent_room(db: Database, rent_name: str, room_id: int) -> dict or None:
+    data = db['rent_room'].find_one({'unit_rent': rent_name, 'unit_rent_room': room_id}, {'_id': 0})
+    logger.debug(data)
+    return data
+
+
+def get_unit_rent(db: Database, rent_name: str, account_id: str, authority: str) -> dict or None:
     """
     get the specify unit rental information
     :param authority:
@@ -151,7 +157,7 @@ def get_unit_rent(db: Database, rent_name: str, account_id: str, authority: str)
     return None
 
 
-def get_rent_room_by_rent(db: Database, rent_name: str):
+def get_rent_room_by_rent(db: Database, rent_name: str) -> list:
     """
     :param rent_name:
     :param db:
