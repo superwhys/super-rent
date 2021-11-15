@@ -28,12 +28,6 @@
             class="password"
             v-model="password">
         </el-input>
-        <el-input
-            placeholder="授权码"
-            prefix-icon="el-icon-key"
-            v-model="authCode"
-            class="authCode">
-        </el-input>
         <div class="status">
           <el-checkbox v-model="checked" class="remenber-password"><span style="font-size: 12px">记住密码</span>
           </el-checkbox>
@@ -46,6 +40,8 @@
 </template>
 
 <script>
+import {getLogin} from "network/Login";
+import md5 from 'js-md5';
 
 export default {
   name: "Login",
@@ -54,15 +50,30 @@ export default {
     return {
       username: '',
       password: '',
-      authCode: '',
       checked: false,
     }
   },
   methods: {
+    md5Encode(password) {
+      return md5(password)
+    },
+    b64Encode(password) {
+      return btoa(password)
+    },
+    pwdEncode(password) {
+      var timeStamp = parseInt(new Date().getTime()/1000).toString();
+      var start = timeStamp.slice(0, 5)
+      var end = timeStamp.slice(5, 10)
+
+      var md6Pwd = this.md5Encode(password)
+      var encryptPwd = start + "-" + md6Pwd + "-" + end
+      return this.b64Encode(encryptPwd)
+    },
     login() {
-      console.log(this.username);
-      console.log(this.password);
-      console.log(this.authCode);
+      var encryptPwd = this.pwdEncode(this.password)
+      getLogin(this.username, encryptPwd).then(res => {
+        console.log(res);
+      })
     }
   }
 }
