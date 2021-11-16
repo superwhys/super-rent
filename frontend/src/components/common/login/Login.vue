@@ -28,6 +28,9 @@
             class="password"
             v-model="password">
         </el-input>
+        <div class="err-msg">
+          <span v-show='errMsgShow'>{{ errMsg }}</span>
+        </div>
         <div class="status">
           <el-checkbox v-model="checked" class="remenber-password"><span style="font-size: 12px">记住密码</span>
           </el-checkbox>
@@ -50,6 +53,8 @@ export default {
     return {
       username: '',
       password: '',
+      errMsg: '',
+      errMsgShow: false,
       checked: false,
     }
   },
@@ -74,19 +79,27 @@ export default {
     },
 
     login() {
-      var encryptPwd = this.pwdEncode(this.password)
-      getLogin(this.username, encryptPwd).then(res => {
-        if (res.status === "success") {
-          console.log(res);
-          this.initUser({username: res.username, token: res.token.access_token});
-          this.$router.push('/rent').catch(()=>{})
-          this.$router.replace('/rent')
-        }
-        else {
-          // TODO display msg under the button
-          alert("账户名或密码错误")
-        }
-      })
+      if(this.username === "" || this.password === "") {
+        this.errMsg = "请输入用户名或密码"
+        this.errMsgShow = true
+      }
+      else {
+        var encryptPwd = this.pwdEncode(this.password)
+        getLogin(this.username, encryptPwd).then(res => {
+          if (res.status === "success") {
+            console.log(res);
+
+            this.errMsgShow = false
+            this.initUser({username: res.username, token: res.token.access_token});
+            this.$router.push('/rent').catch(()=>{})
+            this.$router.replace('/rent')
+          }
+          else {
+            this.errMsg = "用户名或密码错误"
+            this.errMsgShow = true
+          }
+        })
+      }
     }
   }
 }
@@ -156,7 +169,7 @@ export default {
 
 .welcome {
   margin-top: 60px;
-  margin-bottom: 25px;
+  margin-bottom: 40px;
 }
 
 .welcome span {
@@ -177,8 +190,13 @@ export default {
   width: 265px;
 }
 
-.authCode {
-  width: 265px;
+.err-msg {
+  color: rgba(255, 0, 0, 0.85);
+  width: 100%;
+  height: 8px;
+  font-size: 8px;
+  padding-top: 8px;
+  margin-left: 140px;
 }
 
 .username, .password {
