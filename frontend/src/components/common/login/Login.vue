@@ -69,10 +69,23 @@ export default {
       var encryptPwd = start + "-" + md6Pwd + "-" + end
       return this.b64Encode(encryptPwd)
     },
+    initUser(data) {
+      this.$store.commit("addToken", data)
+    },
+
     login() {
       var encryptPwd = this.pwdEncode(this.password)
       getLogin(this.username, encryptPwd).then(res => {
-        console.log(res);
+        if (res.status === "success") {
+          console.log(res);
+          this.initUser({username: res.username, token: res.token.access_token});
+          this.$router.push('/rent').catch(()=>{})
+          this.$router.replace('/rent')
+        }
+        else {
+          // TODO display msg under the button
+          alert("账户名或密码错误")
+        }
       })
     }
   }

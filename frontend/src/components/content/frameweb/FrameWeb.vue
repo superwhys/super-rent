@@ -40,6 +40,12 @@ export default {
       nowPath: '/rent/management'
     }
   },
+  beforeCreate() {
+    if(this.$store.state.token === "") {
+      this.$router.push("/").catch(() => {})
+      this.$router.replace("/")
+    }
+  },
   watch: {
     $route(to, from) {
       this.nowPath = to.path

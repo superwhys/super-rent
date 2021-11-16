@@ -134,6 +134,11 @@ class BillInfo(BaseModel):
 # Response Model
 
 
+class LoginRes(StatusBase):
+    username: Optional[str] = None
+    token: Optional[BaseToken] = None
+
+
 class HomeUnitRentInfo(BaseModel):
     rent_name: str
     rent_address: str

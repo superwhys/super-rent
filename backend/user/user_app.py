@@ -8,7 +8,7 @@
 from common.database import get_db
 from common.common_utils import get_encrypt_decode
 from common.curd import get_user, create_user, get_auth_code, get_user_rent_info_data
-from common.schemas import BaseToken, User, RegisterStatus, RequestStatus, UserAuthority, UserRentInfo
+from common.schemas import LoginRes, User, RegisterStatus, RequestStatus, UserAuthority, UserRentInfo
 from common.general_module import create_access_token, authenticate_user, get_account_in_token
 
 from descriptions import login_desc, register_desc
@@ -24,7 +24,7 @@ from fastapi import APIRouter, Form, Depends, HTTPException, status
 user_app = APIRouter()
 
 
-@user_app.post("/user/login", response_model=BaseToken,
+@user_app.post("/user/login", response_model=LoginRes,
                summary='登录',
                description=login_desc)
 async def login(username: str = Form(...), password: str = Form(...), db: Database = Depends(get_db)):
@@ -49,11 +49,7 @@ async def login(username: str = Form(...), password: str = Form(...), db: Databa
 
     user = authenticate_user(account_id, pwd_cipher, db)
     if not user:
-        raise HTTPException(
-            status.HTTP_401_UNAUTHORIZED,
-            detail={'status': RequestStatus.error, 'msg': "Incorrect account_id or password"},
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        return {'status': RequestStatus.error, 'msg': "username or password error"}
     # token expire time
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -61,7 +57,8 @@ async def login(username: str = Form(...), password: str = Form(...), db: Databa
         data={'sub': user.account_id, 'auth': user.authority, 'create_time': now_time},
         expires_delta=access_token_expires
     )
-    return {'status': RequestStatus.success, 'access_token': access_token, 'token_type': 'bearer'}
+    return {'status': RequestStatus.success, 'username': user.user_name,
+            'token': {'access_token': access_token, 'token_type': 'bearer'}}
 
 
 @user_app.post("/user", response_model=RegisterStatus,
