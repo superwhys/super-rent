@@ -20,6 +20,22 @@ def get_encrypt_pwd(pwd: str):
     return b64encode_pwd.decode('utf-8')
 
 
+def get_auth_code():
+    auth_code = "SuperRent-Auth-Code"
+    name = "SuperYong"
+    now = str(int(time()))
+
+    auth_code_md5 = md5(auth_code.encode("utf-8")).hexdigest()
+    name_md5 = md5(name.encode("utf-8")).hexdigest()
+
+    text = f'{now[:5]}-{name_md5}-{auth_code_md5}-{now[5:]}'
+    print(text)
+    text_b64 = b64encode(text.encode("utf-8")).decode("utf-8")
+
+    print(text_b64)
+
+
 if __name__ == '__main__':
     encrypt_pwd = get_encrypt_pwd("testpwd")
     print(encrypt_pwd)
+    get_auth_code()

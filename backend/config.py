@@ -7,6 +7,7 @@
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import HTTPException, status
 from passlib.context import CryptContext
+from hashlib import md5
 
 
 '''FastAPI'''
@@ -15,12 +16,13 @@ RUN_PORT = 8000
 
 '''databases'''
 # HOST = 'mongo'
-HOST = '127.0.0.1'
-PORT = 27017
+HOST = 'superyong.top'
+PORT = 27018
 
 DOCS_DEBUG = True
 
 SECRET_KEY = "fe8a711ed3fcc1ba9e56d35369ebc589bc420d6bf474eed24b878b7a09e9ed96"
+AUTH_CODE = md5("SuperRent-Auth-Code".encode('utf-8')).hexdigest()
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 ALGORITHM = "HS256"
 

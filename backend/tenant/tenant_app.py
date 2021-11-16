@@ -33,7 +33,7 @@ async def create_tenant_api(tenant: Tenant, db: Database = Depends(get_db), toke
     """
     if not tenant.name or not tenant.id_card:
         raise HTTPException(
-            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="Tenant name or id card is None",
             headers={"WWW-Authenticate": "Bearer"},
         )
@@ -47,7 +47,7 @@ async def create_tenant_api(tenant: Tenant, db: Database = Depends(get_db), toke
         )
     if get_tenant(db, tenant.name, tenant.id_card) is not None:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
+            status_code=status.HTTP_200_OK,
             detail="The tenant already exists",
             headers={"WWW-Authenticate": "Bearer"}
         )

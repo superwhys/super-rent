@@ -12,10 +12,11 @@ from common.schemas import BaseToken, User, RegisterStatus, RequestStatus, UserA
 from common.general_module import create_access_token, authenticate_user, get_account_in_token
 
 from descriptions import login_desc, register_desc
-from config import ACCESS_TOKEN_EXPIRE_MINUTES, pwd_context, oauth2_schema
+from config import ACCESS_TOKEN_EXPIRE_MINUTES, AUTH_CODE, pwd_context, oauth2_schema
 
 from time import time
 from loguru import logger
+from base64 import b64decode
 from pymongo.database import Database
 from datetime import datetime, timedelta
 from fastapi import APIRouter, Form, Depends, HTTPException, status
@@ -68,19 +69,43 @@ async def login(username: str = Form(...), password: str = Form(...), db: Databa
                description=register_desc)
 async def register(user: User, auth_code: str, db: Database = Depends(get_db)):
     """
-    :param user: password: base64(timestamp-md5(pwd))
-    :param auth_code: Authorization code
+    :param user: password: base64(timestamp[:5]-md5(pwd)-timestamp[5:])
+    :param auth_code: Authorization code base64(timestamp[:5]-md5(name)-md5(AuthCode)-timestamp[5:])
+    MTYzNzAtYzcxN2NmYWNmYWY1NGQxYjEwYzE0NmYzMDBhN2ZlMmUtNTMyNzUyYTI4MjYzMGUzMjZlODU5ZTE3ZWM1YzM1MzUtNDQ1NDU=
     :param db:
     :return:
     """
     now_stamp = int(time())
+    logger.debug(user)
+    try:
+        auth_code_split = b64decode(auth_code.encode("utf-8")).decode("utf-8").split('-')
+        timestamp = int(auth_code_split[0] + auth_code_split[-1])
+        # c717cfacfaf54d1b10c146f300a7fe2e
+        auth_code_name = auth_code_split[1]
+        auth_code_base = auth_code_split[2]
+    except Exception:
+        logger.error("auth code error")
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN,
+            detail={'status': RequestStatus.error, 'msg': "Auth code Nonconformity to specification"},
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
-    timestamp, _ = get_encrypt_decode(auth_code)
-    if timedelta(seconds=now_stamp - timestamp).days > 7 or not get_auth_code(db, auth_code):
-        return {'status': RequestStatus.error, 'msg': 'this Authorization code is not useful'}
+    if any((timedelta(seconds=now_stamp - timestamp).days > 7,
+            not get_auth_code(db, auth_code_name),
+            auth_code_base != AUTH_CODE)):
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN,
+            detail={'status': RequestStatus.error, 'msg': "this Authorization code is not useful"},
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
     if get_user(db, user.account_id):
-        return {'status': RequestStatus.error, 'msg': 'this username has been register'}
+        raise HTTPException(
+            status.HTTP_200_OK,
+            detail={status: RequestStatus.error, 'msg': "this username has been register"},
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
     timestamp, pwd = get_encrypt_decode(user.password)
 
