@@ -7,12 +7,12 @@
 from loguru import logger
 from pymongo.database import Database
 
-from config import oauth2_schema
+from config import oauth2_schema, ERROR_HEADER
 from descriptions import get_all_unit_rental_desc, get_unit_rental_desc, get_all_unit_rental_room_desc, get_unit_rental_room_desc
 
 from common.database import get_db
 from common.curd import get_unit_rent_by_name, get_unit_rent, get_rent_room_by_rent, get_user, get_specify_rent_room
-from common.schemas import UnitRentLst, UserAuthority, RentRoomLst, RequestStatus, RentRoom
+from common.schemas import UnitRentLst, UserAuthority, RentRoomLst, RequestStatus, RentRoom, SpecifyUnitRental
 from common.general_module import get_user_agent, get_account_in_token
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -57,7 +57,7 @@ async def get_all_unit_rental(db: Database = Depends(get_db), token: str = Depen
                    summary='获取当前账号名下指定出租单位',
                    deprecated=True,
                    description=get_unit_rental_desc)
-async def get_all_unit_rental(rental_name: str, db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+async def get_specify_unit_rental(rental_name: str, db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     """
     Get the unit rental for specified
     :param rental_name:
@@ -65,7 +65,18 @@ async def get_all_unit_rental(rental_name: str, db: Database = Depends(get_db), 
     :param db:
     :return:
     """
-    pass
+    account_id, authority = get_account_in_token(token)
+    if authority not in {UserAuthority.admin, UserAuthority.owner, UserAuthority.contractor}:
+        raise HTTPException(
+            status.HTTP_400_BAD_REQUEST,
+            detail={'status': RequestStatus.error, 'msg': "Permissions error"},
+            headers=ERROR_HEADER
+        )
+    unit_rental = get_unit_rent(db, rental_name, account_id, authority)
+    res = {'status': RequestStatus.success, 'unit_rental': unit_rental}
+    if unit_rental:
+        return SpecifyUnitRental(**res)
+    return SpecifyUnitRental(**{'status': RequestStatus.error, 'msg': 'unit rent not found'})
 
 
 @unit_rent_app.get("/unit_rental_room/{rental_name}",
@@ -80,6 +91,7 @@ async def get_all_unit_rental_room(rental_name: str, db: Database = Depends(get_
     """
     account_id, authority = get_account_in_token(token)
 
+    # Check whether the unit rental exists
     unit_rental = get_unit_rent(db, rental_name, account_id, authority)
     if unit_rental:
         rental_room_lst = get_rent_room_by_rent(db, unit_rental['rent_name'])

@@ -29,8 +29,11 @@ ALGORITHM = "HS256"
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="/rent/v1/user/login")
 
+
+ERROR_HEADER = {"WWW-Authenticate": "Bearer"}
+
 credentials_exception = HTTPException(
         status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
+        headers=ERROR_HEADER,
     )

@@ -76,39 +76,6 @@ class User(BaseModel):
     phone: Optional[str] = "00000000000"
 
 
-class HomeUnitRentInfo(BaseModel):
-    rent_name: str
-    rent_address: str
-    rent_owner: str
-    rent_type: RentType
-    start_time: datetime
-    rent_room_num: int
-    this_month_price: int
-
-
-class RentTypeNum(BaseModel):
-    rent_type_name: str
-    rent_num: int
-
-
-class UserRentInfo(StatusBase):
-    account_id: str
-    username: str
-    totalPrice: int
-    each_rental_info: List[HomeUnitRentInfo]
-    rent_type_num: List[RentTypeNum]
-
-
-class Tenant(BaseModel):
-    name: str
-    unit_rent: Optional[str] = None
-    unit_rent_room: Optional[str] = None
-    status: Optional[TenantStatus] = TenantStatus.no_rent
-    rent_plan_time: Optional[int] = 0
-    phone: str
-    id_card: str
-
-
 class UnitRent(BaseModel):
     rent_name: str
     rent_owner: str
@@ -120,10 +87,14 @@ class UnitRent(BaseModel):
     rent_room_num: int
 
 
-class UnitRentLst(StatusBase):
-    rental_owner: Optional[str] = None
-    rental_admin: Optional[str] = None
-    unit_rental_lst: List[UnitRent]
+class Tenant(BaseModel):
+    name: str
+    unit_rent: Optional[str] = None
+    unit_rent_room: Optional[str] = None
+    status: Optional[TenantStatus] = TenantStatus.no_rent
+    rent_plan_time: Optional[int] = 0
+    phone: str
+    id_card: str
 
 
 class RentRoom(BaseModel):
@@ -157,6 +128,57 @@ class BillInfo(BaseModel):
     total: int
 
 
+#########################################
+#########################################
+#########################################
+# Response Model
+
+
+class HomeUnitRentInfo(BaseModel):
+    rent_name: str
+    rent_address: str
+    rent_owner: str
+    rent_type: RentType
+    start_time: datetime
+    rent_room_num: int
+    this_month_price: int
+
+
+class RentTypeNum(BaseModel):
+    rent_type_name: str
+    rent_num: int
+
+
+class UserRentInfo(StatusBase):
+    """
+    get user info response model
+    """
+    account_id: str
+    username: str
+    totalPrice: int
+    each_rental_info: List[HomeUnitRentInfo]
+    rent_type_num: List[RentTypeNum]
+
+
+class UnitRentLst(StatusBase):
+    """
+    get_all_unit_rental response model
+    """
+    rental_owner: Optional[str] = None
+    rental_admin: Optional[str] = None
+    unit_rental_lst: List[UnitRent]
+
+
 class RentRoomLst(StatusBase):
+    """
+    get_all_unit_rental_room response model
+    """
     unit_rental: Optional[str]
     rental_room_lst: Optional[List[RentRoom]] = None
+
+
+class SpecifyUnitRental(StatusBase):
+    """
+    get_specify_unit_rental response model
+    """
+    unit_rental: Optional[UnitRent] = None
