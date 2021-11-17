@@ -11,13 +11,12 @@ from hashlib import md5
 
 
 '''FastAPI'''
-RUN_PORT = 8000
+RUN_PORT = 9915
 
 
 '''databases'''
-# HOST = 'mongo'
-HOST = 'superyong.top'
-PORT = 27018
+HOST = 'mongo'
+PORT = 27017
 
 DOCS_DEBUG = True
 

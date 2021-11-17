@@ -26,7 +26,7 @@ Applications = FastAPI(
     title='Super Rent API Docs',
     description='Super Rent 租金管理平台API接口文档',
     version='0.0.1',
-    docs_url='/docs' if DOCS_DEBUG else None,
+    docs_url='/rent/docs' if DOCS_DEBUG else None,
 )
 
 Applications.add_middleware(
