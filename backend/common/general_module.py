@@ -34,15 +34,17 @@ def get_account_in_token(token):
     :return:
     """
     # get the username and authority in token
+    logger.debug(token)
     try:
         token_decode = jwt.decode(token, key=SECRET_KEY, algorithms=[ALGORITHM])
+        logger.debug(token_decode)
         account_id = token_decode.get("sub")
         if account_id is None:
-            raise credentials_exception
+            return None, None
         authority = token_decode.get('auth')
     except JWTError as e:
         logger.error(e)
-        raise credentials_exception
+        return None, None
     else:
         return account_id, authority
 

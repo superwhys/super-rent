@@ -5,11 +5,11 @@
 # @Date  : 2021/9/610:36 下午
 # @Desc  :
 
-from config import oauth2_schema
+from config import oauth2_schema, credentials_exception
 from descriptions import create_tenant_desc, get_tenant_info_desc
 
 from common.database import get_db
-from common.schemas import Tenant, BaseToken
+from common.schemas import Tenant, BaseToken, TenantInfoRes, RequestStatus
 from common.general_module import get_user_agent, get_account_in_token
 from common.curd import get_tenant, create_tenant
 
@@ -39,6 +39,9 @@ async def create_tenant_api(tenant: Tenant, db: Database = Depends(get_db), toke
         )
 
     account_id, authority = get_account_in_token(token)
+    if account_id is None or authority is None:
+        raise credentials_exception
+
     if authority not in ['admin', 'owner', 'contractor']:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -59,23 +62,26 @@ async def create_tenant_api(tenant: Tenant, db: Database = Depends(get_db), toke
 
 @tenant_app.get("/tenant",
                 summary="获取租客信息",
-                deprecated=True,
+                response_model=TenantInfoRes,
                 description=get_tenant_info_desc)
-async def get_tenant_info(name: str, unit_rent: str, rent_room: str,
-                          db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+async def get_tenant_info(name: str, id_card: str, db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     """
     :param db:
     :param name:
-    :param unit_rent:
-    :param rent_room:
+    :param id_card:
     :param token:
     :return:
     """
     account_id, authority = get_account_in_token(token)
+    if account_id is None or authority is None:
+        raise credentials_exception
+
     if authority not in ['admin', 'owner', 'contractor']:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Insufficient permissions",
             headers={"WWW-Authenticate": "Bearer"}
         )
-    pass
+    tenant = get_tenant(db, name, id_card)
+    tenant_res = {'status': RequestStatus.success, 'tenant': tenant}
+    return TenantInfoRes(**tenant_res)

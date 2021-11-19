@@ -7,7 +7,7 @@
 from loguru import logger
 from pymongo.database import Database
 
-from config import oauth2_schema, ERROR_HEADER
+from config import oauth2_schema, ERROR_HEADER, credentials_exception
 from descriptions import get_all_unit_rental_desc, get_unit_rental_desc, get_all_unit_rental_room_desc, get_unit_rental_room_desc
 
 from common.database import get_db
@@ -36,6 +36,9 @@ async def get_all_unit_rental(db: Database = Depends(get_db), token: str = Depen
     """
     # get the username and authority in token
     account_id, authority = get_account_in_token(token)
+    if account_id is None or authority is None:
+        raise credentials_exception
+
     user = get_user(db, account_id)
     if user:
         username = user.get('user_name')
@@ -55,7 +58,6 @@ async def get_all_unit_rental(db: Database = Depends(get_db), token: str = Depen
 
 @unit_rent_app.get("/unit-rental/{rental_name}",
                    summary='获取当前账号名下指定出租单位',
-                   deprecated=True,
                    description=get_unit_rental_desc)
 async def get_specify_unit_rental(rental_name: str, db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     """
@@ -66,6 +68,9 @@ async def get_specify_unit_rental(rental_name: str, db: Database = Depends(get_d
     :return:
     """
     account_id, authority = get_account_in_token(token)
+    if account_id is None or authority is None:
+        raise credentials_exception
+
     if authority not in {UserAuthority.admin, UserAuthority.owner, UserAuthority.contractor}:
         raise HTTPException(
             status.HTTP_400_BAD_REQUEST,
@@ -90,6 +95,8 @@ async def get_all_unit_rental_room(rental_name: str, db: Database = Depends(get_
     :return:
     """
     account_id, authority = get_account_in_token(token)
+    if account_id is None or authority is None:
+        raise credentials_exception
 
     # Check whether the unit rental exists
     unit_rental = get_unit_rent(db, rental_name, account_id, authority)
@@ -117,8 +124,10 @@ async def get_unit_rental_room(rental_name: str, room_id: int,
     :param db:
     :return:
     """
-    token_account, authority = get_account_in_token(token)
-    user = get_user(db, token_account)
+    account_id, authority = get_account_in_token(token)
+    if account_id is None or authority is None:
+        raise credentials_exception
+    user = get_user(db, account_id)
 
     if authority == UserAuthority.admin:
         unit_rent_lst = get_unit_rent_by_name(db)

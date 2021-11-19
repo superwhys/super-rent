@@ -12,7 +12,7 @@ from common.schemas import LoginRes, User, RegisterStatus, RequestStatus, UserAu
 from common.general_module import create_access_token, authenticate_user, get_account_in_token
 
 from descriptions import login_desc, register_desc
-from config import ACCESS_TOKEN_EXPIRE_MINUTES, AUTH_CODE, pwd_context, oauth2_schema
+from config import ACCESS_TOKEN_EXPIRE_MINUTES, AUTH_CODE, pwd_context, oauth2_schema, credentials_exception
 
 from time import time
 from loguru import logger
@@ -58,7 +58,7 @@ async def login(username: str = Form(...), password: str = Form(...), db: Databa
         expires_delta=access_token_expires
     )
     return {'status': RequestStatus.success, 'username': user.user_name,
-            'token': {'access_token': access_token, 'token_type': 'bearer'}}
+            'access_token': access_token, 'token_type': 'bearer'}
 
 
 @user_app.post("/user", response_model=RegisterStatus,
@@ -143,6 +143,8 @@ async def get_user_info(account_id: str, db: Database = Depends(get_db), token: 
     :return:
     """
     token_account, authority = get_account_in_token(token)
+    if token_account is None or authority is None:
+        raise credentials_exception
 
     if token_account != account_id:
         raise HTTPException(

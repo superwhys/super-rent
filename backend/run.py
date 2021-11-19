@@ -43,4 +43,4 @@ Applications.include_router(tenant_app, prefix='/rent/v1', tags=['租客相关 API接
 Applications.include_router(unit_rent_app, prefix='/rent/v1', tags=['出租单位相关 API接口'])
 
 if __name__ == '__main__':
-    uvicorn.run('run:Applications', host='0.0.0.0', port=RUN_PORT, reload=True, debug=True, workers=1)
+    uvicorn.run('run:Applications', host='0.0.0.0', port=RUN_PORT, reload=True, debug=True, workers=4)

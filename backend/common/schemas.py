@@ -13,6 +13,7 @@ from typing import Optional, List
 class RequestStatus(str, Enum):
     success = "success"
     error = "error"
+    none = "None"
 
 
 class UserAuthority(str, Enum):
@@ -22,6 +23,7 @@ class UserAuthority(str, Enum):
 
 
 class RentType(str, Enum):
+    none = None
     apartment = "¹«Ô¢"
     shop = "µêÆÌ"
     building = "Â¥¶°"
@@ -43,7 +45,7 @@ class RentStatus(str, Enum):
 
 
 class StatusBase(BaseModel):
-    status: RequestStatus
+    status: RequestStatus = RequestStatus.none
     msg: Optional[str] = None
 
 
@@ -101,9 +103,9 @@ class RentRoom(BaseModel):
     unit_rent: str
     unit_rent_room: str
     room_type: str
-    rent_time: datetime
+    rent_time: datetime = datetime(1999, 9, 15, 9, 15, 15)
     rent: int
-    status: RentStatus
+    status: RentStatus = RentStatus.no_rent
     tenant: Optional[str] = None
 
 
@@ -136,14 +138,19 @@ class BillInfo(BaseModel):
 
 class LoginRes(StatusBase):
     username: Optional[str] = None
-    token: Optional[BaseToken] = None
+    access_token: Optional[str] = None
+    token_type: Optional[str] = None
+
+
+class TenantInfoRes(StatusBase):
+    tenant: Optional[Tenant] = None
 
 
 class HomeUnitRentInfo(BaseModel):
     rent_name: str
     rent_address: str
     rent_owner: str
-    rent_type: RentType
+    rent_type: RentType = RentType.none
     start_time: datetime
     rent_room_num: int
     this_month_price: int
