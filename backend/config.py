@@ -15,8 +15,8 @@ RUN_PORT = 9915
 
 
 '''databases'''
-# HOST = 'mongo'
-HOST = 'localhost'
+HOST = 'mongo'
+# HOST = 'localhost'
 PORT = 27017
 
 DOCS_DEBUG = True
