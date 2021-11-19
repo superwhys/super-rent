@@ -5,7 +5,7 @@ services:
         volumes:
           - ./backend:/app
         ports:
-          - "8000:8000"
+          - "9915:9915"
         links:
           - "mongo"
     mongo:
