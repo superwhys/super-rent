@@ -4,9 +4,9 @@
 # @Author: SuperYong
 # @Date  : 2021/11/712:12 上午
 # @Desc  :
-
+from hashlib import md5
 from datetime import datetime, timedelta
-from random import choice, randint
+from random import choice, randint, choices
 from pymongo import MongoClient
 from faker import Faker
 
@@ -109,12 +109,20 @@ class FakeData:
         for d in data:
             if d['status'] == '无':
                 continue
+
+            year = choices([2018, 2019, 2020, 2021])
+            month = randint(1, 12)
+            date = f'{year}-{month}'
+
+            text = f'{d["unit_rent"]}-{d["unit_rent_room"]}-{date}'
+            md5_id = md5(text.encode('utf-8')).hexdigest()
             bill_info = {
+                '_id': md5_id,
                 'create_time': datetime.now(),
                 'unit_rent': d['unit_rent'],
                 'unit_rent_room': d['unit_rent_room'],
                 'tenant': d['name'],
-                'use_date': datetime.now() + timedelta(days=30),
+                'use_date': datetime(year, month, randint(1, 28)),
                 'last_month_ele': randint(10, 50),
                 'last_month_water': randint(20, 50),
                 'last_month_gas': randint(10, 50),
@@ -143,18 +151,24 @@ class FakeData:
         self.mongo_db['bill_info'].create_index([('unit_rent', 1)], background=True)
         self.mongo_db['bill_info'].create_index([('unit_rent', 1), ('unit_rent_room', 1)], background=True)
         self.mongo_db['bill_info'].create_index([('unit_rent', 1), ('unit_rent_room', 1), ('use_date', 1)], unique=True, background=True)
+
         self.mongo_db['charges'].create_index([('unit_rent', 1)], background=True)
+
         self.mongo_db['rent_room'].create_index([('status', 1)], background=True)
         self.mongo_db['rent_room'].create_index([('tenant', 1)], background=True)
         self.mongo_db['rent_room'].create_index([('unit_rent', 1), ('unit_rent_room', 1)], background=True, unique=True)
+
         self.mongo_db['tenant'].create_index([('name', 1)], background=True)
         self.mongo_db['tenant'].create_index([('name', 1), ('id_card', 1)], background=True, unique=True)
         self.mongo_db['tenant'].create_index([('status', 1)], background=True)
         self.mongo_db['tenant'].create_index([('status', 1), ('unit_rent', 1)], background=True)
+
         self.mongo_db['unit_rent'].create_index([('rent_name', 1)], background=True)
         self.mongo_db['unit_rent'].create_index([('rent_type', 1)], background=True)
+
         self.mongo_db['user'].create_index([('authority', 1)], background=True)
         self.mongo_db['user'].create_index([('user_name', 1)], background=True)
+        self.mongo_db['user'].create_index([('account_id', 1)], background=True)
 
     def update_rent_room_tenant(self):
         data = self.mongo_db['tenant'].find()
