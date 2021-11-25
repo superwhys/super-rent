@@ -168,3 +168,11 @@ async def get_user_info(account_id: str, db: Database = Depends(get_db), token: 
 async def update_user_info(account_id: str, db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     # TODO update user info
     pass
+
+
+@user_app.post("/bindContractor",
+               deprecated=True)
+async def bind_contractor_2_owner(owner_account: str, contractor: str,
+                                  db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+    # TODO bind a contractor 2 owner
+    pass
