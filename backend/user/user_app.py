@@ -161,3 +161,9 @@ async def get_user_info(account_id: str, db: Database = Depends(get_db), token: 
 
     user_info['status'] = RequestStatus.success
     return user_info
+
+
+@user_app.put("/user/{account_id}")
+async def update_user_info(account_id: str, db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+    # TODO update user info
+    pass
