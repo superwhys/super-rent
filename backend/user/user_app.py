@@ -163,7 +163,8 @@ async def get_user_info(account_id: str, db: Database = Depends(get_db), token: 
     return user_info
 
 
-@user_app.put("/user/{account_id}")
+@user_app.put("/user/{account_id}",
+              deprecated=True)
 async def update_user_info(account_id: str, db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     # TODO update user info
     pass
