@@ -18,8 +18,34 @@ from common.general_module import get_user_agent, get_account_in_token
 from fastapi import APIRouter, Depends, HTTPException, status
 
 unit_rent_app = APIRouter(
+    # 过滤没有token的请求
     dependencies=[Depends(get_user_agent)]
 )
+
+
+@unit_rent_app.post("/unit-rental",
+                    summary="创建一个出租单位",
+                    deprecated=True,
+                    description="")
+async def create_unit_rental(db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+    # TODO 创建一个出租单位
+    pass
+
+
+@unit_rent_app.put("/unit-rental/{rent_owner}/{rent_name}",
+                   deprecated=True,)
+async def update_unit_rental(rent_owner: str, rent_name: str,
+                             db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+    # TODO 更新一个出租单位信息
+    pass
+
+
+@unit_rent_app.delete("/unit-rental/{rent_owner}/{rent_name}",
+                      deprecated=True,)
+async def delete_unit_rental(rent_owner: str, rent_name: str,
+                             db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+    # TODO 删除一个出租单位
+    pass
 
 
 @unit_rent_app.get("/unit-rental",
