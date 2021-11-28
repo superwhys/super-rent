@@ -8,7 +8,7 @@ from typing import Optional
 from collections import Counter
 from pymongo.database import Database
 from fastapi import HTTPException, status
-from common.schemas import UnitRent, Tenant, User, UserAuthority
+from common.schemas import UnitRent, Tenant, User, UserAuthority, UpdateInfo, UpdateUser, RequestStatus
 
 
 def get_auth_code(db: Database, auth_code) -> bool:
@@ -253,6 +253,25 @@ def get_user_rent_info_data(db: Database, account_id: str, authority: UserAuthor
         logger.debug(e)
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="get user info function error",
+            detail={'status': RequestStatus.error, 'msg': "get user info function error"},
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+
+def update_user_info_db(db: Database, account_id: str, update_info: UpdateUser):
+    # update_dic = {info['type']: info['msg'] for info in update_info}
+    # logger.debug(update_dic)
+
+    update_dic = {info.type.value: info.msg for info in update_info.update_info}
+    logger.debug(update_dic)
+    try:
+        db['user'].update_one({'account_id': account_id}, {'$set': update_dic}, upsert=True)
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(
+            status.HTTP_406_NOT_ACCEPTABLE,
+            detail={'status': RequestStatus.error, 'msg': "server not acceptable"},
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    else:
+        return {'status': RequestStatus.success}

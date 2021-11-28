@@ -44,6 +44,13 @@ class RentStatus(str, Enum):
     no_rent = "Î´³ö×â"
 
 
+class UpdateType(Enum):
+    user_name = "user_name"
+    authority = "authority"
+    password = "password"
+    phone = "phone"
+
+
 class StatusBase(BaseModel):
     status: RequestStatus = RequestStatus.none
     msg: Optional[str] = None
@@ -76,6 +83,15 @@ class User(BaseModel):
     password: str
     authority: UserAuthority
     phone: Optional[str] = "00000000000"
+
+
+class UpdateInfo(BaseModel):
+    type: UpdateType
+    msg: str
+
+
+class UpdateUser(BaseModel):
+    update_info: List[UpdateInfo]
 
 
 class UnitRent(BaseModel):

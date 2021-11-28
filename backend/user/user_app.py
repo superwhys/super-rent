@@ -7,8 +7,8 @@
 
 from common.database import get_db
 from common.common_utils import get_encrypt_decode
-from common.curd import get_user, create_user, get_auth_code, get_user_rent_info_data
-from common.schemas import LoginRes, User, RegisterStatus, RequestStatus, UserAuthority, UserRentInfo
+from common.curd import get_user, create_user, get_auth_code, get_user_rent_info_data, update_user_info_db
+from common.schemas import LoginRes, User, RegisterStatus, RequestStatus, UserRentInfo, UpdateUser
 from common.general_module import create_access_token, authenticate_user, get_account_in_token
 
 from descriptions import login_desc, register_desc
@@ -165,9 +165,21 @@ async def get_user_info(account_id: str, db: Database = Depends(get_db), token: 
 
 @user_app.put("/user/{account_id}",
               deprecated=True)
-async def update_user_info(account_id: str, db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+async def update_user_info(account_id: str, update_info: UpdateUser,
+                           db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     # TODO update user info
-    pass
+    token_account, authority = get_account_in_token(token)
+    if token_account is None or authority is None:
+        raise credentials_exception
+
+    if token_account != account_id:
+        raise HTTPException(
+            status.HTTP_401_UNAUTHORIZED,
+            detail={'status': RequestStatus.error, 'msg': "account not allow"},
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+    logger.debug(update_info)
+    return update_user_info_db(db, account_id, update_info)
 
 
 @user_app.post("/bindContractor",
