@@ -11,7 +11,7 @@ from common.curd import get_user, create_user, get_auth_code, get_user_rent_info
 from common.schemas import LoginRes, User, RegisterStatus, RequestStatus, UserRentInfo, UpdateUser
 from common.general_module import create_access_token, authenticate_user, get_account_in_token
 
-from descriptions import login_desc, register_desc
+from descriptions import login_desc, register_desc, update_info_desc
 from config import ACCESS_TOKEN_EXPIRE_MINUTES, AUTH_CODE, pwd_context, oauth2_schema, credentials_exception
 
 from time import time
@@ -164,10 +164,10 @@ async def get_user_info(account_id: str, db: Database = Depends(get_db), token: 
 
 
 @user_app.put("/user/{account_id}",
-              deprecated=True)
+              summary="更新用户信息",
+              description=update_info_desc)
 async def update_user_info(account_id: str, update_info: UpdateUser,
                            db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
-    # TODO update user info
     token_account, authority = get_account_in_token(token)
     if token_account is None or authority is None:
         raise credentials_exception
