@@ -259,9 +259,6 @@ def get_user_rent_info_data(db: Database, account_id: str, authority: UserAuthor
 
 
 def update_user_info_db(db: Database, account_id: str, update_info: UpdateUser):
-    # update_dic = {info['type']: info['msg'] for info in update_info}
-    # logger.debug(update_dic)
-
     update_dic = {info.type.value: info.msg for info in update_info.update_info}
     logger.debug(update_dic)
     try:
