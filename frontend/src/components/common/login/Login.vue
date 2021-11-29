@@ -90,7 +90,7 @@ export default {
             console.log(res);
 
             this.errMsgShow = false
-            this.initUser({username: res.username, token: res.token.access_token});
+            this.initUser({username: res.username, token: res.access_token});
             this.$router.push('/rent').catch(()=>{})
             this.$router.replace('/rent')
           }
