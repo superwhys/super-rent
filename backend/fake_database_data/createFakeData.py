@@ -6,14 +6,14 @@
 # @Desc  :
 from hashlib import md5
 from datetime import datetime, timedelta
-from random import choice, randint, choices
+from random import choice, randint
 from pymongo import MongoClient
 from faker import Faker
 
 
 class FakeData:
     def __init__(self):
-        self.fake_count = 1000
+        self.fake_count = 500
         self.fake = Faker(locale='zh_CN')
         self.mongo_con = MongoClient("localhost:27017")
         self.mongo_db = self.mongo_con['super_rent']
@@ -28,8 +28,8 @@ class FakeData:
 
     def insert_2_mongo(self, table, data):
         # print(data)
-        # self.mongo_db[table].insert_one(data)
-        pass
+        self.mongo_db[table].insert_one(data)
+        # pass
 
     def create_charges(self):
         for i in self.unit_rent:
@@ -61,6 +61,11 @@ class FakeData:
             self.unitRent_ownerName_mapping[self.unit_rent[i]].append(rent_room_num)
             self.insert_2_mongo('unit_rent', unit_rent)
 
+    def find_tenant_status(self, data):
+        find_data = self.mongo_db['tenant'].find_one(data)
+        print(data)
+        return find_data
+
     def create_rent_room(self):
         for unit_rent in self.unitRent_ownerName_mapping:
             room_num = self.unitRent_ownerName_mapping[unit_rent][1]
@@ -73,10 +78,10 @@ class FakeData:
                     'rent_time': self.fake.date(pattern="%Y-%m-%d %H:%M:%S"),
                     'rent': randint(1000, 6000),
                     'status': choice(self.rent_room_status),
-                    'update_time': datetime.now()
+                    'update_time': datetime.now(),
+                    'tenant': ""
                 }
-                print(data)
-                # self.insert_2_mongo('rent_room', data)
+                self.insert_2_mongo('rent_room', data)
 
     def create_tenant(self):
         tenant_status = ['无', '租期内', '租期已过']
@@ -110,7 +115,7 @@ class FakeData:
             if d['status'] == '无':
                 continue
 
-            year = choices([2018, 2019, 2020, 2021])
+            year = choice([2018, 2019, 2020, 2021])
             month = randint(1, 12)
             date = f'{year}-{month}'
 
@@ -143,9 +148,7 @@ class FakeData:
             bill_info['gas_money'] = charge['unit_gas_money'] * gas_use
 
             bill_info['total'] = bill_info['ele_money'] + bill_info['water_money'] + bill_info['gas_money']
-            print(bill_info)
-            # self.insert_2_mongo('bill_info', bill_info)
-            self.mongo_db['bill_info'].update_one({'unit_rent': bill_info['unit_rent'], 'tenant': bill_info['tenant']}, {'$set': bill_info}, upsert=True)
+            self.insert_2_mongo('bill_info', bill_info)
 
     def create_index(self):
         self.mongo_db['bill_info'].create_index([('unit_rent', 1)], background=True)
@@ -162,6 +165,7 @@ class FakeData:
         self.mongo_db['tenant'].create_index([('name', 1), ('id_card', 1)], background=True, unique=True)
         self.mongo_db['tenant'].create_index([('status', 1)], background=True)
         self.mongo_db['tenant'].create_index([('status', 1), ('unit_rent', 1)], background=True)
+        self.mongo_db['tenant'].create_index([('unit_rent', 1), ('unit_rent_room', 1)], background=True)
 
         self.mongo_db['unit_rent'].create_index([('rent_name', 1)], background=True)
         self.mongo_db['unit_rent'].create_index([('rent_type', 1)], background=True)
@@ -171,20 +175,45 @@ class FakeData:
         self.mongo_db['user'].create_index([('account_id', 1)], background=True)
 
     def update_rent_room_tenant(self):
-        data = self.mongo_db['tenant'].find()
-        for d in data:
-            self.mongo_db['rent_room'].update_one({'unit_rent': d['unit_rent'], 'unit_rent_room': d['unit_rent_room']}, {'$set': {'tenant': d['name']}}, upsert=True)
+        table = self.mongo_db['rent_room']
+        data = table.find()
 
-    def run(self):
-        # self.create_charges()
-        # self.create_unit_rent()
-        # self.create_rent_room()
-        # self.create_tenant()
-        # self.create_bill_info()
+        for d in data:
+            find_data = self.find_tenant_status({'unit_rent': d['unit_rent'], 'unit_rent_room': d['unit_rent_room']})
+
+            update_data = {}
+            if find_data is not None:
+                print(find_data)
+                update_data['tenant'] = find_data['name']
+                if find_data.get('status') == "租期内":
+                    update_data['status'] = choice(['已出租，本月已缴费', '已出租，本月未缴费'])
+                else:
+                    update_data['tenant'] = ""
+                    update_data['status'] = "未出租"
+            else:
+                update_data['status'] = "未出租"
+            table.update_one({'unit_rent': d['unit_rent'], 'unit_rent_room': d['unit_rent_room']}, {'$set': update_data}, upsert=True)
+
+    def delete_database(self):
+        self.mongo_db['charges'].drop()
+        self.mongo_db['bill_info'].drop()
+        self.mongo_db['rent_room'].drop()
+        self.mongo_db['tenant'].drop()
+        self.mongo_db['unit_rent'].drop()
+
+    def run(self, delete=False):
+        if delete:
+            self.delete_database()
+            print('delete success')
+        self.create_charges()
+        self.create_unit_rent()
+        self.create_rent_room()
+        self.create_tenant()
         self.update_rent_room_tenant()
-        # self.create_index()
+        self.create_bill_info()
+        self.create_index()
 
 
 if __name__ == '__main__':
     fd = FakeData()
-    fd.run()
+    fd.run(delete=True)
