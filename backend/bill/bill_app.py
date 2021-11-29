@@ -15,7 +15,7 @@ from loguru import logger
 from fastapi import APIRouter, Depends, HTTPException, status
 
 bill_app = APIRouter(
-    # 过滤没有token的请求
+    # filter the request that has no token
     dependencies=[Depends(get_user_agent)]
 )
 
