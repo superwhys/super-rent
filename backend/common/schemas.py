@@ -125,24 +125,31 @@ class RentRoom(BaseModel):
     tenant: Optional[str] = None
 
 
-class BillInfo(BaseModel):
+class BaseBill(BaseModel):
+    last_month_water: int
+    last_month_ele: int
+    last_month_gas: int
+    # this month
+    this_month_water: int
+    this_month_ele: int
+    this_month_gas: int
+
+
+class BillInfo(BaseBill):
     tenant: str
     unit_rent: str
     unit_rent_room: str
     create_time: datetime
     use_date: str
-    last_month_water: int
-    last_month_ele: int
-    last_month_gas: int
-    this_month_water: int
-    this_month_ele: int
-    this_month_gas: int
+    # each use
     ele_used: int
     water_used: int
     gas_used: int
+    # each money
     ele_money: int
     water_money: int
     gas_money: int
+    # total
     total: int
 
 

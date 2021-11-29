@@ -19,14 +19,18 @@ bill_app = APIRouter(
     dependencies=[Depends(get_user_agent)]
 )
 
-# TODO bill database _id need to use a data that can identify a unique bill_info
-# md5()
+# bill database _id need to use a data that can identify a unique bill_info
+# md5(unit_rent-unit_rent_room-year-month)
 
 
 @bill_app.post("/bill",
                deprecated=True)
-async def create_bill(db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
-    # TODO create a new bill
+async def create_bill(tenant: str, unit_rent: str, unit_rent_room: int,
+                      db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+    token_account, authority = get_account_in_token(token)
+    if token_account is None or authority is None:
+        raise credentials_exception
+
     pass
 
 
