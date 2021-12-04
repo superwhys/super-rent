@@ -28,7 +28,6 @@ bill_app = APIRouter(
 # md5(unit_rent-unit_rent_room-year-month)
 
 
-# TODO add other money
 @bill_app.post("/bill")
 async def create_bill(tenant: str, unit_rent: str, unit_rent_room: str,
                       resource_use: BaseBill,

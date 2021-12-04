@@ -133,6 +133,8 @@ class BaseBill(BaseModel):
     this_month_water: int
     this_month_ele: int
     this_month_gas: int
+    # other money
+    other_money: int
 
 
 class BillInfo(BaseBill):

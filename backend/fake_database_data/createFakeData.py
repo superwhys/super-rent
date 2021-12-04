@@ -134,6 +134,7 @@ class FakeData:
                 'this_month_ele': randint(50, 90),
                 'this_month_water': randint(50, 100),
                 'this_month_gas': randint(50, 90),
+                'other_money': randint(500, 1000),
                 'rent_money': randint(1000, 3000)
             }
             ele_use = bill_info['this_month_ele'] - bill_info['last_month_ele']
