@@ -139,7 +139,7 @@ class BillInfo(BaseBill):
     tenant: str
     unit_rent: str
     unit_rent_room: str
-    create_time: datetime
+    update_time: datetime
     use_date: str
     # each use
     ele_used: int
@@ -149,6 +149,7 @@ class BillInfo(BaseBill):
     ele_money: int
     water_money: int
     gas_money: int
+    rent_money: int
     # total
     total: int
 

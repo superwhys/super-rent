@@ -3,12 +3,14 @@
 # @Author: SuperYong
 # @Date  : 2021/9/19:55 ÏÂÎç
 # @Desc  :
+from hashlib import md5
 from loguru import logger
 from typing import Optional
 from collections import Counter
 from pymongo.database import Database
 from fastapi import HTTPException, status
-from common.schemas import UnitRent, Tenant, User, UserAuthority, UpdateInfo, UpdateUser, RequestStatus
+from common.schemas import UnitRent, Tenant, User, UserAuthority, UpdateInfo, UpdateUser, RequestStatus, Charge, \
+    BillInfo, RentRoom
 
 
 def get_auth_code(db: Database, auth_code) -> bool:
@@ -272,3 +274,51 @@ def update_user_info_db(db: Database, account_id: str, update_info: UpdateUser):
         )
     else:
         return {'status': RequestStatus.success}
+
+
+def get_charges_data(db: Database, unit_rent: str):
+    """
+    get specify unit_rent charge
+    :param db:
+    :param unit_rent:
+    :return:
+    """
+    charge = db['charges'].find_one({'unit_rent': unit_rent}, {'_id': 0})
+    return Charge(**charge)
+
+
+def get_rent_room(db: Database, unit_rent: str, unit_rent_room: str):
+    """
+    get_rent_room info
+    :param db:
+    :param unit_rent:
+    :param unit_rent_room:
+    :return:
+    """
+    data = db['rent_room'].find_one({'unit_rent': unit_rent, 'unit_rent_room': unit_rent_room}, {'_id': 0})
+    return RentRoom(**data)
+
+
+def insert_bill_info(db: Database, bill_info: BillInfo):
+    """
+    create bill_info _id and insert into db
+    :param db:
+    :param bill_info:
+    :return:
+    """
+    # md5(unit_rent - unit_rent_room - year - month)
+    try:
+        data = bill_info.dict()
+        now_time = data.get('create_time')
+        unit_rent = data.get('unit_rent')
+        unit_rent_room = data.get("unit_rent_room")
+        _id = md5(f'{unit_rent}-{unit_rent_room}-{now_time.year}-{now_time.month}'.encode('utf-8')).hexdigest()
+        data['_id'] = _id
+        db['bill_info'].insert_one(data)
+        return {'status': RequestStatus.success}
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={'status': RequestStatus.error, 'msg': 'server not acceptable'}
+        )

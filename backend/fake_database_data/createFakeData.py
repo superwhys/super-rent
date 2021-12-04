@@ -123,7 +123,7 @@ class FakeData:
             md5_id = md5(text.encode('utf-8')).hexdigest()
             bill_info = {
                 '_id': md5_id,
-                'create_time': datetime.now(),
+                'update_time': datetime.now(),
                 'unit_rent': d['unit_rent'],
                 'unit_rent_room': d['unit_rent_room'],
                 'tenant': d['name'],
@@ -134,6 +134,7 @@ class FakeData:
                 'this_month_ele': randint(50, 90),
                 'this_month_water': randint(50, 100),
                 'this_month_gas': randint(50, 90),
+                'rent_money': randint(1000, 3000)
             }
             ele_use = bill_info['this_month_ele'] - bill_info['last_month_ele']
             water_use = bill_info['this_month_water'] - bill_info['last_month_water']
@@ -147,7 +148,8 @@ class FakeData:
             bill_info['water_money'] = charge['unit_water_money'] * water_use
             bill_info['gas_money'] = charge['unit_gas_money'] * gas_use
 
-            bill_info['total'] = bill_info['ele_money'] + bill_info['water_money'] + bill_info['gas_money']
+            bill_info['total'] = bill_info['ele_money'] + bill_info['water_money'] + \
+                                 bill_info['gas_money'] + bill_info['total']
             self.insert_2_mongo('bill_info', bill_info)
 
     def create_index(self):
