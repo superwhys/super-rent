@@ -8,7 +8,8 @@
 # @Summary : this is the summary
 from datetime import datetime
 
-from common.curd import get_charges_data, insert_bill_info, get_rent_room
+from common.curd import get_charges_data, insert_bill_info, get_rent_room, create_bill_info_id, get_specify_bill_info, \
+    update_specify_bill_info
 from common.database import get_db
 from pymongo.database import Database
 
@@ -19,6 +20,7 @@ from common.general_module import get_user_agent, get_account_in_token
 from loguru import logger
 from fastapi import APIRouter, Depends, HTTPException, status
 
+# TODO add the checker of the unit rental into dependencies
 bill_app = APIRouter(
     # filter the request that has no token
     dependencies=[Depends(get_user_agent)]
@@ -32,6 +34,7 @@ bill_app = APIRouter(
 async def create_bill(tenant: str, unit_rent: str, unit_rent_room: str,
                       resource_use: BaseBill,
                       db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+    # TODO check if the unit rental is under this account
     # TODO add to middleware
     token_account, authority = get_account_in_token(token)
     if token_account is None or authority is None:
@@ -81,17 +84,20 @@ async def create_bill(tenant: str, unit_rent: str, unit_rent_room: str,
     return insert_bill_info(db, BillInfo(**bill_info))
 
 
-@bill_app.put("/bill",
+@bill_app.put("/bill/{unit_rent}/{unit_rent_room}",
               deprecated=True)
-async def update_bill(db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
-    # TODO update a new bill
-    pass
+async def update_bill(unit_rent: str, unit_rent_room: str, year: int, month: int,
+                      db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+    # TODO check if the unit rental is under this account
+
+    _id = create_bill_info_id(unit_rent, unit_rent_room, year, month)
+    update_specify_bill_info(db)
 
 
 @bill_app.get("/bill/{unit_rent}/{unit_room}/{month}",
               deprecated=True)
-async def update_bill(unit_rent: str, unit_room: str, month: int,
-                      db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
+async def get_bill_info(unit_rent: str, unit_room: str, month: int,
+                        db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     # TODO update a new bill
     pass
 
