@@ -121,3 +121,6 @@ async def get_user_agent(request: Request):
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    token_account, authority = get_account_in_token(token)
+    if token_account is None or authority is None:
+        raise credentials_exception

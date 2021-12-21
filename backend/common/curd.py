@@ -299,6 +299,10 @@ def get_rent_room(db: Database, unit_rent: str, unit_rent_room: str):
     return RentRoom(**data)
 
 
+def create_bill_info_id(unit_rent: str, unit_rent_room: str, year: int, month: int):
+    return md5(f'{unit_rent}-{unit_rent_room}-{year}-{month}'.encode('utf-8')).hexdigest()
+
+
 def insert_bill_info(db: Database, bill_info: BillInfo):
     """
     create bill_info _id and insert into db
@@ -312,7 +316,7 @@ def insert_bill_info(db: Database, bill_info: BillInfo):
         now_time = data.get('create_time')
         unit_rent = data.get('unit_rent')
         unit_rent_room = data.get("unit_rent_room")
-        _id = md5(f'{unit_rent}-{unit_rent_room}-{now_time.year}-{now_time.month}'.encode('utf-8')).hexdigest()
+        _id = create_bill_info_id(unit_rent, unit_rent_room, now_time.year, now_time.month)
         data['_id'] = _id
         db['bill_info'].insert_one(data)
         return {'status': RequestStatus.success}
@@ -322,3 +326,18 @@ def insert_bill_info(db: Database, bill_info: BillInfo):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail={'status': RequestStatus.error, 'msg': 'server not acceptable'}
         )
+
+
+def update_specify_bill_info(db: Database, _id: str, update_data: dict):
+    try:
+        db['bill_info'].update_one({'_id': _id}, {'$set': update_data})
+    except Exception as e:
+        logger.error(e)
+        return False
+    else:
+        return True
+
+
+def get_specify_bill_info(db: Database, _id: str):
+    data = db['bill_info'].find_one({'_id': _id})
+    return data
