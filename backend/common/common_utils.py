@@ -19,7 +19,7 @@ def get_encrypt_decode(encrypt_code: str):
     try:
         logger.debug(encrypt_code)
         code_encode_utf8 = encrypt_code.encode('utf-8')
-        code_b64decode = b64encode(code_encode_utf8).decode('utf-8')
+        code_b64decode = b64decode(code_encode_utf8).decode('utf-8')
         logger.debug(code_b64decode)
         b64decode_split = code_b64decode.split('-')
         logger.debug(b64decode_split)
