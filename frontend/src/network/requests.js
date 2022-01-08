@@ -3,7 +3,7 @@ import axios from 'axios'
 // 封装网络请求模块
 export function request(config) {
     const instance = axios.create({
-        baseURL: 'http://127.0.0.1:9915/rent/v1',
+        baseURL: '119.91.145.21:9915/rent/v1',
         timeout: 5000,
         method: 'get'
     })
@@ -27,7 +27,7 @@ export function request(config) {
 
 export function PostRequests(config, data) {
     const instance = axios.create({
-        baseURL: 'http://127.0.0.1:9915/rent/v1',
+        baseURL: '119.91.145.21:9915/rent/v1',
         timeout: 5000,
         method: 'post'
     })

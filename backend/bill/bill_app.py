@@ -26,6 +26,7 @@ bill_app = APIRouter(
     dependencies=[Depends(get_user_agent)]
 )
 
+
 # bill database _id need to use a data that can identify a unique bill_info
 # md5(unit_rent-unit_rent_room-year-month)
 
@@ -87,11 +88,24 @@ async def create_bill(tenant: str, unit_rent: str, unit_rent_room: str,
 @bill_app.put("/bill/{unit_rent}/{unit_rent_room}",
               deprecated=True)
 async def update_bill(unit_rent: str, unit_rent_room: str, year: int, month: int,
+                      update_bil_info: BaseBill,
                       db: Database = Depends(get_db), token: str = Depends(oauth2_schema)):
     # TODO check if the unit rental is under this account
 
-    _id = create_bill_info_id(unit_rent, unit_rent_room, year, month)
-    update_specify_bill_info(db)
+    try:
+        _id = create_bill_info_id(unit_rent, unit_rent_room, year, month)
+        update_specify_bill_info(db, _id, update_bil_info.dict())
+    except Exception as e:
+        logger.error(e)
+        return HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail={'status': RequestStatus.error, 'msg': f'update error: {e}'}
+        )
+    else:
+        return HTTPException(
+            status_code=status.HTTP_200_OK,
+            detail={'status': RequestStatus.success, 'msg': 'update success'}
+        )
 
 
 @bill_app.get("/bill/{unit_rent}/{unit_room}/{month}",
