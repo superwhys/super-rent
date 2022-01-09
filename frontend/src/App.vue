@@ -14,6 +14,11 @@
       const ss = document.getElementById('app');
       console.log(ss)
       ss.style.height = h + "px";
+    },
+    created() {
+      if (sessionStorage.getItem('userInfo') !== null) {
+        this.$store.commit('EventListener')
+      }
     }
   }
 

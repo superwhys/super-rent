@@ -12,10 +12,17 @@ export default new Vuex.Store({
     addToken(state, data) {
       state.token = data.token
       state.user = data.username
+      sessionStorage.setItem('userInfo', JSON.stringify(data))
+    },
+    EventListener (state) {
+      var data = JSON.parse(sessionStorage.getItem('userInfo'))
+      state.token = data.token
+      state.user = data.username
     }
+
   },
   actions: {
   },
   modules: {
-  }
+  },
 })

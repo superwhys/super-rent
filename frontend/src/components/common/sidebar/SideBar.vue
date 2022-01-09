@@ -2,7 +2,7 @@
   <div>
     <el-menu
         class="el-menu-vertical-demo"
-        default-active="/rent/management"
+        :default-active=routePath
         background-color="#002140"
         text-color="#fff"
         active-text-color="#ffd04b"
@@ -49,15 +49,21 @@ export default {
   name: "SideBar",
   data () {
     return {
-      router: true
+      router: true,
+      routePath: ''
     }
+  },
+  beforeMount() {
+    this.routePath = this.$route.fullPath
+  },
+  mounted() {
+    this.$refs.menu.open(['serivceCenter'])
+    this.$refs.menu.open(['rentCenter'])
   },
   methods: {
     // serviceCenter 禁止关闭
     handleClose(index, indexPath) {
-      if(index === 'serivceCenter'){
-        this.$refs.menu.open(indexPath)
-      }
+      this.$refs.menu.open(indexPath)
     }
   }
 }

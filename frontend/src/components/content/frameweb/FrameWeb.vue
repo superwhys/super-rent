@@ -8,7 +8,8 @@
       <!--   右边顶部   -->
       <el-header height="160px" class="header">
         <page-head>
-          <manage-head v-show="nowPath === '/rent/management'"></manage-head>
+          <manage-head v-if="nowPath === '/rent/management'"></manage-head>
+          <house-head v-else-if="nowPath === '/rent/house'"></house-head>
         </page-head>
       </el-header>
       <!--   右边主体   -->
@@ -26,6 +27,7 @@
 import SideBar from "components/common/sidebar/SideBar";
 import PageHead from "components/common/pageheader/PageHead";
 import ManageHead from "components/common/headtop/ManageHead";
+import houseHead from "components/common/headtop/houseHead";
 
 export default {
 
@@ -33,15 +35,21 @@ export default {
   components: {
     SideBar,
     PageHead,
-    ManageHead
+    ManageHead,
+    houseHead
   },
   data() {
     return {
-      nowPath: '/rent/management'
+      nowPath: ''
     }
+  },
+  beforeMount() {
+    console.log(this.$route.fullPath);
+    this.nowPath = this.$route.fullPath
   },
   beforeCreate() {
     if(this.$store.state.token === "") {
+      console.log("no state")
       this.$router.push("/").catch(() => {})
       this.$router.replace("/")
     }
